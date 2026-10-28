@@ -1,0 +1,28 @@
+# Java / Maven
+backend/target/
+*.class
+*.log
+hs_err_pid*
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+npm-debug.log*
+
+# Entornos y secretos (nunca se suben)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# IDE y sistema
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

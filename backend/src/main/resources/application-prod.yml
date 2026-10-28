@@ -1,0 +1,15 @@
+# Perfil de producción. Los secretos llegan por variables de entorno o por un gestor de secretos;
+# nunca se escriben en este fichero. Conexión siempre con TLS.
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_APP_USER}
+    password: ${DB_APP_PASSWORD}
+  flyway:
+    url: ${DB_URL}
+    user: ${DB_MIGRATE_USER}
+    password: ${DB_MIGRATE_PASSWORD}
+
+logging:
+  level:
+    root: INFO

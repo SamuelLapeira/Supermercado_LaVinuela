@@ -1,0 +1,10 @@
+# Perfil de pruebas: MySQL 8.4 real en un contenedor temporal (Testcontainers).
+# La opción TC_MY_CNF carga src/test/resources/mysql-conf/override.cnf en el servidor.
+spring:
+  datasource:
+    url: jdbc:tc:mysql:8.4:///shop?TC_MY_CNF=mysql-conf
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+logging:
+  level:
+    com.lavinuela.shop: INFO

@@ -1,0 +1,15 @@
+# Perfil de desarrollo local. Requiere el entorno de Docker (./tools/dev-up.sh) y las variables de .env.
+# Flyway migra con un usuario con permisos de DDL; la aplicación trabaja con otro que solo tiene DML.
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:${DB_PORT:3306}/${DB_NAME:shop}?connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&allowPublicKeyRetrieval=true&sslMode=PREFERRED
+    username: app_rw
+    password: ${DB_APP_PASSWORD}
+  flyway:
+    url: ${spring.datasource.url}
+    user: app_migrate
+    password: ${DB_MIGRATE_PASSWORD}
+
+logging:
+  level:
+    com.lavinuela.shop: DEBUG

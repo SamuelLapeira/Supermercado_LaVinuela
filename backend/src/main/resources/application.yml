@@ -1,0 +1,37 @@
+# Configuración común. Los valores de negocio (tarifas, plazos, pedido mínimo...) NO van aquí:
+# viven en la base de datos y los edita la empresa desde el panel (ver Fase 5, app_settings).
+spring:
+  application:
+    name: lavinuela-shop
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      # Aislamiento READ COMMITTED: menos bloqueos de hueco y menos interbloqueos en el stock (Fase 5, apartado 1).
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      # El esquema lo gestiona Flyway. Si las entidades no coinciden con las tablas, la aplicación no arranca.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+  shutdown: graceful
+  error:
+    # Nunca se devuelven mensajes técnicos ni trazas de pila al cliente.
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false

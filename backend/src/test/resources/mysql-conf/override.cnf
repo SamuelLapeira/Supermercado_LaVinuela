@@ -1,0 +1,8 @@
+[mysqld]
+character_set_server=utf8mb4
+collation_server=utf8mb4_0900_ai_ci
+default_time_zone=+00:00
+transaction_isolation=READ-COMMITTED
+sql_require_primary_key=ON
+# Necesario para crear triggers con el registro binario activado (ver docs/database.md).
+log_bin_trust_function_creators=1

@@ -1,0 +1,62 @@
+# Entorno de desarrollo local. Arranca con ./tools/dev-up.sh (crea .env con contraseñas aleatorias la primera vez).
+# Solo para desarrollo: los puertos escuchan únicamente en 127.0.0.1.
+name: lavinuela
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Falta MYSQL_ROOT_PASSWORD en .env}
+      MYSQL_DATABASE: ${DB_NAME:-shop}
+      DB_NAME: ${DB_NAME:-shop}
+      DB_MIGRATE_PASSWORD: ${DB_MIGRATE_PASSWORD:?Falta DB_MIGRATE_PASSWORD en .env}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:?Falta DB_APP_PASSWORD en .env}
+      DB_RO_PASSWORD: ${DB_RO_PASSWORD:?Falta DB_RO_PASSWORD en .env}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+00:00
+      - --transaction-isolation=READ-COMMITTED
+      - --sql-require-primary-key=ON
+      - --local-infile=0
+      # Permite crear triggers con el registro binario activado (equivale a lo que hacen los servicios gestionados).
+      - --log-bin-trust-function-creators=1
+      - --slow-query-log=ON
+      - --long-query-time=0.5
+    ports:
+      - "127.0.0.1:${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  # Valkey es compatible con el protocolo de Redis y tiene licencia BSD. La decisión definitiva
+  # (Redis o Valkey) se confirma con el despliegue; para la aplicación es indiferente.
+  redis:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    command: ["valkey-server", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Captura todos los correos que envíe la aplicación; no sale ninguno a internet.
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${MAIL_SMTP_PORT:-1025}:1025"
+      - "127.0.0.1:${MAIL_UI_PORT:-8025}:8025"
+
+volumes:
+  mysql-data:
