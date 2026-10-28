@@ -71,6 +71,15 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/tienda/**/*.ts",
+              "projects/tienda/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -139,6 +148,15 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/panel/**/*.ts",
+              "projects/panel/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -164,6 +182,15 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/ui/tsconfig.spec.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ui/**/*.ts",
+              "projects/ui/**/*.html"
+            ]
           }
         }
       }
@@ -191,6 +218,15 @@
           "options": {
             "tsConfig": "projects/core/tsconfig.spec.json"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/core/**/*.ts",
+              "projects/core/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -217,6 +253,15 @@
           "options": {
             "tsConfig": "projects/api/tsconfig.spec.json"
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/api/**/*.ts",
+              "projects/api/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -242,6 +287,15 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/util/tsconfig.spec.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/util/**/*.ts",
+              "projects/util/**/*.html"
+            ]
           }
         }
       }

@@ -9,7 +9,7 @@ una ✗ roja y no debería aceptarse.
 | Tarea | Qué hace |
 | --- | --- |
 | **Backend** | Compila con Java 25 con los avisos del compilador como error, ejecuta todas las pruebas (incluidas las de MySQL real con Testcontainers), las reglas de arquitectura y la verificación de módulos. Falla si alguna prueba se salta |
-| **Frontend** | Instala dependencias de forma reproducible (`npm ci`), compila `tienda` y `panel` en modo de producción (TypeScript estricto y límites de tamaño) y ejecuta las pruebas |
+| **Frontend** | Instala dependencias de forma reproducible (`npm ci`), pasa ESLint (estilo, accesibilidad y fronteras entre librerías), compila `tienda` y `panel` en modo de producción (TypeScript estricto y límites de tamaño) y ejecuta las pruebas |
 
 ## Cómo verlo
 
@@ -28,6 +28,7 @@ mvn verify
 # Frontend
 cd ..\frontend
 npm ci
+npx.cmd ng lint
 npx.cmd ng build tienda
 npx.cmd ng build panel
 npx.cmd ng test --watch=false
@@ -53,7 +54,5 @@ de actualizaciones del proyecto.
 
 - **Contrato OpenAPI y cliente de Angular generado.** Se añade con el primer endpoint real (historia E1-01):
   hasta entonces no hay nada que describir, y montar la maquinaria vacía solo añadiría ruido.
-- **Reglas de fronteras entre librerías del frontend** (ESLint). Requieren instalar ESLint en el workspace
-  de Angular; ver `docs/frontend-bootstrap.md`.
 - Análisis de dependencias vulnerables y de la imagen de contenedores (se incorporan antes de la revisión de
   seguridad, historia E14-04).

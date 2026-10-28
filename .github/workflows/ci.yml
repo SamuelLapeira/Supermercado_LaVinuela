@@ -77,6 +77,9 @@ jobs:
         run: npm ci
 
       # La compilación de producción aplica TypeScript estricto y los límites de tamaño.
+      - name: Lint (estilo, accesibilidad y fronteras entre proyectos)
+        run: npx ng lint
+
       - name: Compilar la tienda
         run: npx ng build tienda
 
