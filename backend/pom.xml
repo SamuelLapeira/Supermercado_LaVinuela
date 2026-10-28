@@ -24,10 +24,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- Versiones fuera del BOM de Spring Boot. Se revisan en cada actualización mensual de parches. -->
-    <spring-modulith.version>2.1.0</spring-modulith.version>
-    <archunit.version>1.4.2</archunit.version>
-    <jspecify.version>1.0.0</jspecify.version>
-    <maven-enforcer-plugin.version>3.6.1</maven-enforcer-plugin.version>
+    <spring-modulith.version>2.1.2</spring-modulith.version>
+    <archunit.version>1.5.1</archunit.version>
+    <jspecify.version>1.0.1</jspecify.version>
+    <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
   </properties>
 
   <dependencyManagement>
