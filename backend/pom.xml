@@ -74,6 +74,17 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- Observabilidad: comprobaciones de salud y métricas (docs/observability.md). -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- Verificación de módulos y eventos entre módulos. -->
     <dependency>
       <groupId>org.springframework.modulith</groupId>
@@ -168,6 +179,14 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>build-info</id>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

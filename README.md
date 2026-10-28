@@ -89,8 +89,8 @@ lo toca, cumple accesibilidad si toca la interfaz y está documentada.
 | E0-02 | Entorno local con Docker ([docs/local-environment.md](docs/local-environment.md)) | Hecha |
 | E0-03 | Migraciones y esquema de la base de datos ([docs/database.md](docs/database.md)) | Hecha |
 | E0-04 | Núcleo compartido: dinero, identificadores, errores, paginación y reloj | Hecha |
-| E0-05 | Registros, métricas y comprobaciones de salud | Siguiente |
-| E0-06 | Base visual: tokens, capas CSS y componentes básicos | Pendiente |
+| E0-05 | Registros, métricas y comprobaciones de salud ([docs/observability.md](docs/observability.md)) | Hecha |
+| E0-06 | Base visual: tokens, capas CSS y componentes básicos | Siguiente |
 | E0-07 | Integración continua ([docs/ci.md](docs/ci.md)) | Hecha (OpenAPI y cliente generado: con el primer endpoint) |
 
 **Verificado:** `mvn verify` en el backend: 73 pruebas, 0 fallos, 0 saltadas (incluidas las de MySQL real).

@@ -10,6 +10,21 @@ spring:
     user: ${DB_MIGRATE_USER}
     password: ${DB_MIGRATE_PASSWORD}
 
+management:
+  server:
+    # Puerto aparte para sondas y métricas. NO debe publicarse a internet: solo la red interna
+    # (orquestador, sistema de métricas). La dirección se fija según el alojamiento.
+    port: ${MANAGEMENT_PORT:8081}
+    address: ${MANAGEMENT_ADDRESS:127.0.0.1}
+
 logging:
+  structured:
+    format:
+      # Una línea JSON por registro (formato ECS), lista para cualquier sistema de registros.
+      console: ecs
+    ecs:
+      service:
+        name: lavinuela-shop
+        environment: production
   level:
     root: INFO

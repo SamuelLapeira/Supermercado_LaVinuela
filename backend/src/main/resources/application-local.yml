@@ -10,6 +10,16 @@ spring:
     user: app_migrate
     password: ${DB_MIGRATE_PASSWORD}
 
+management:
+  server:
+    # Los puntos de control van en un puerto aparte y solo accesible desde esta máquina.
+    port: ${MANAGEMENT_PORT:8081}
+    address: ${MANAGEMENT_ADDRESS:127.0.0.1}
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,loggers
+
 logging:
   level:
     com.lavinuela.shop: DEBUG

@@ -16,3 +16,4 @@ Cada decisión importante se registra aquí con su motivo. Si cambia, se añade 
 | 010 | [Ticket simplificado por defecto; Veri*factu pendiente](010-ticket-simplificado.md) | Aceptada |
 | 011 | [Dependencias entre módulos (ajuste sobre la Fase 3, apartado 1.2)](011-dependencias-entre-modulos.md) | Aceptada |
 | 012 | [Inmutabilidad por triggers y ajustes del esquema respecto a la Fase 5](012-esquema-inmutabilidad-y-ajustes.md) | Aceptada |
+| 013 | [Identificador de petición propio y puerto de gestión aparte](013-identificador-de-peticion-y-puerto-de-gestion.md) | Aceptada |

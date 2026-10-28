@@ -166,6 +166,7 @@ public class GlobalExceptionHandler {
     }
 
     private static @Nullable String traceId() {
-        return MDC.get(TRACE_ID_KEY);
+        String traceId = MDC.get(TRACE_ID_KEY);
+        return traceId != null ? traceId : MDC.get(RequestTrackingFilter.MDC_REQUEST_ID);
     }
 }

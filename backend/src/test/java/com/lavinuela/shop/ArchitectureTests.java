@@ -1,5 +1,7 @@
 package com.lavinuela.shop;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.stream.StreamSupport;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -119,12 +122,23 @@ class ArchitectureTests {
                 .orShould().callMethod(ZonedDateTime.class, "now"));
     }
 
+    /**
+     * Las reglas de arriba pasan también cuando no encuentran clases que comprobar. Esta prueba evita que
+     * eso ocurra sin que nos enteremos: si la importación de clases falla, aquí se ve.
+     */
+    @Test
+    void theApplicationClassesAreActuallyChecked() {
+        long imported = StreamSupport.stream(classes.spliterator(), false).count();
+
+        assertThat(imported).as("clases de la aplicación importadas por ArchUnit").isGreaterThan(50);
+    }
+
     @Test
     void generalCodingRules() {
-        GeneralCodingRules.NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS.check(classes);
-        GeneralCodingRules.NO_CLASSES_SHOULD_USE_JAVA_UTIL_LOGGING.check(classes);
-        GeneralCodingRules.NO_CLASSES_SHOULD_THROW_GENERIC_EXCEPTIONS.check(classes);
-        GeneralCodingRules.NO_CLASSES_SHOULD_USE_FIELD_INJECTION.check(classes);
+        check(GeneralCodingRules.NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS);
+        check(GeneralCodingRules.NO_CLASSES_SHOULD_USE_JAVA_UTIL_LOGGING);
+        check(GeneralCodingRules.NO_CLASSES_SHOULD_THROW_GENERIC_EXCEPTIONS);
+        check(GeneralCodingRules.NO_CLASSES_SHOULD_USE_FIELD_INJECTION);
     }
 
     private static void check(ArchRule rule) {

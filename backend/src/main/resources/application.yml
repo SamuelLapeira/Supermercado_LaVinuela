@@ -35,3 +35,34 @@ server:
     include-binding-errors: never
     include-stacktrace: never
     include-exception: false
+
+# Observabilidad (docs/observability.md). Aquí solo lo común; el puerto interno y el formato de los
+# registros dependen del perfil.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      # Sin detalles: la respuesta solo dice UP o DOWN. Nunca se revelan nombres de servicios ni de bases de datos.
+      show-details: never
+      group:
+        # La aplicación solo está "lista" para recibir tráfico si puede hablar con la base de datos.
+        readiness:
+          include: readinessState,db
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      # Permite calcular percentiles (p95, p99) de la latencia en el sistema de métricas.
+      percentiles-histogram:
+        http.server.requests: true
+  info:
+    java:
+      enabled: true
+
+logging:
+  pattern:
+    # Todos los registros de una petición llevan su identificador de seguimiento.
+    level: "%5p [%X{requestId:-}]"
