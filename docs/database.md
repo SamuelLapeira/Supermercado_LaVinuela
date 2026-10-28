@@ -23,6 +23,7 @@ Están en `backend/src/main/resources/db/migration`.
 | `V009__fulltext_search.sql` | Índice de búsqueda de texto con *ngram* |
 | `V010__immutability_triggers.sql` | Registros que no se pueden modificar ni borrar |
 | `V100__seed_reference_data.sql` | Roles, permisos, IVA, alérgenos, tarifas, ajustes, banner, páginas legales (borrador) y plantillas de correo |
+| `V101__brand_from_logo.sql` | El color principal por defecto pasa a ser el verde del logotipo (`#007924`) |
 
 Resultado: **53 tablas** de negocio más la de historial de Flyway.
 

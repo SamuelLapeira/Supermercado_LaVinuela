@@ -1,0 +1,4 @@
+// Orden de las capas de CSS. Lo que está más a la derecha gana a lo de su izquierda, sin pelear con la
+// especificidad de los selectores. Los estilos de los componentes de Angular (encapsulados) siempre ganan
+// a todas estas capas dentro de su ámbito.
+@layer reset, tokens, base, layout, components, utilities;

@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Viñuela · Paleta y sistema de diseño</title>
+<style>
+@layer reset, tokens, base, layout, components, utilities;
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+  ul[role="list"],
+  ol[role="list"] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  img,
+  svg,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--fs-400);
+    line-height: var(--lh-body);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    line-height: var(--lh-tight);
+    letter-spacing: -0.02em;
+    font-weight: 800;
+  }
+  h1 {
+    font-size: var(--fs-800);
+  }
+  h2 {
+    font-size: var(--fs-700);
+  }
+  h3 {
+    font-size: var(--fs-600);
+  }
+
+  a {
+    color: var(--brand-text);
+    text-underline-offset: 0.18em;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* Foco siempre visible, con contraste de al menos 3:1 sobre cualquier fondo de la paleta. */
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  /* Respeta a quien ha pedido menos movimiento. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer layout {
+  .lv-container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--space-5);
+  }
+}
+
+@layer utilities {
+  /* Visible solo para lectores de pantalla. */
+  .lv-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Enlace «saltar al contenido»: aparece al tabular. */
+  .lv-skip-link {
+    position: absolute;
+    left: var(--space-4);
+    top: -4rem;
+    z-index: var(--z-modal);
+    padding: var(--space-3) var(--space-4);
+    background: var(--brand);
+    color: var(--on-brand);
+    border-radius: var(--radius-m);
+    transition: top var(--dur-s) var(--ease);
+  }
+  .lv-skip-link:focus {
+    top: var(--space-4);
+  }
+}
+
+@layer tokens {
+  /* theme:light */
+  :root {
+    color-scheme: light;
+
+    /* Marca. --brand lo puede cambiar la empresa desde el panel; la aplicación recalcula entonces
+       --brand-hover, --brand-soft, --brand-text y --on-brand comprobando el contraste. */
+    --brand: #007924;
+    --brand-hover: #005f1c;
+    --brand-soft: #e5f3e7;
+    --brand-text: #007924;
+    --on-brand: #ffffff;
+
+    /* Color de apoyo: el amarillo del anillo del logo. Solo como fondo, con texto oscuro encima. */
+    --accent: #ecde34;
+    --on-accent: #171716;
+
+    /* Agua del embalse y tierra del tronco. */
+    --water: #9ad9d1;
+    --water-soft: #e1f4f1;
+    --earth: #6d5d34;
+
+    /* Neutros. */
+    --bg: #f4f7f2;
+    --surface: #ffffff;
+    --surface-2: #edf2ea;
+    --ink: #171716;
+    --muted: #566358;
+    --line: #d5ddd2;
+    --control-border: #758278;
+    --focus: #171716;
+
+    /* Estados (cada uno con su fondo suave para avisos). */
+    --ok: #1b6b34;
+    --ok-soft: #ddf0e3;
+    --warn: #7a5b00;
+    --warn-soft: #fff3c4;
+    --danger: #b3261e;
+    --danger-soft: #fbe4e1;
+    --info: #1c5e8c;
+    --info-soft: #e1eff8;
+
+    /* Colores de las categorías (marcador de posición de las fotos de producto). */
+    --cat-1: #ddefd8; --cat-1-ink: #1d4a1a;
+    --cat-2: #d3efeb; --cat-2-ink: #0b4b45;
+    --cat-3: #f7f1b3; --cat-3-ink: #4d4500;
+    --cat-4: #ebe2cb; --cat-4-ink: #4b3f1f;
+    --cat-5: #dcebf7; --cat-5-ink: #173f5f;
+    --cat-6: #f6ddd8; --cat-6-ink: #6a2a22;
+
+    --shadow-1: 0 1px 2px rgb(23 23 22 / 0.08), 0 1px 3px rgb(23 23 22 / 0.06);
+    --shadow-2: 0 4px 12px rgb(23 23 22 / 0.1);
+    --shadow-3: 0 14px 40px rgb(23 23 22 / 0.2);
+
+    /* Tipografía. Las fuentes de marca se instalarán autoalojadas; mientras tanto, la del sistema. */
+    --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Figtree Variable", system-ui,
+      -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body: "Figtree Variable", "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --fs-300: 0.875rem;
+    --fs-400: 1rem;
+    --fs-500: 1.125rem;
+    --fs-600: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    --fs-700: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    --fs-800: clamp(1.9rem, 1.4rem + 2vw, 2.8rem);
+    --fs-900: clamp(2.2rem, 1.5rem + 3vw, 3.6rem);
+    --lh-tight: 1.15;
+    --lh-body: 1.55;
+
+    /* Espacio (escala de 4 px). */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+    --space-10: 8rem;
+
+    --radius-s: 0.375rem;
+    --radius-m: 0.625rem;
+    --radius-l: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-pill: 999px;
+
+    /* Mínimo táctil: 44 px (WCAG 2.2 pide 24 como mínimo; en el móvil conviene más). */
+    --target: 2.75rem;
+
+    --z-header: 30;
+    --z-drawer: 41;
+    --z-modal: 50;
+    --z-toast: 60;
+
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --dur-s: 120ms;
+    --dur-m: 220ms;
+
+    --container: 77.5rem;
+  }
+
+  /* theme:dark */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --brand-soft: #14301a;
+      --brand-text: #4fcb72;
+      --earth: #c7b27a;
+      --bg: #0b120d;
+      --surface: #121a15;
+      --surface-2: #18231c;
+      --ink: #e8f0e8;
+      --muted: #a3b5a6;
+      --line: #2a382e;
+      --control-border: #7c8c80;
+      --focus: #ecde34;
+      --water-soft: #12302d;
+      --ok: #7fd39c;
+      --ok-soft: #153222;
+      --warn: #f2d35b;
+      --warn-soft: #3a3000;
+      --danger: #ff9a90;
+      --danger-soft: #3b1e1c;
+      --info: #8cc8f0;
+      --info-soft: #14283a;
+      --cat-1: #1f3a1d; --cat-1-ink: #cfe9c9;
+      --cat-2: #12403b; --cat-2-ink: #bfe8e2;
+      --cat-3: #3f3a0a; --cat-3-ink: #efe69a;
+      --cat-4: #3b3320; --cat-4-ink: #e6d9b3;
+      --cat-5: #163549; --cat-5-ink: #bcd9f0;
+      --cat-6: #47231f; --cat-6-ink: #f3c9c2;
+      --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.45);
+      --shadow-3: 0 14px 40px rgb(0 0 0 / 0.6);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --brand-soft: #14301a;
+    --brand-text: #4fcb72;
+    --earth: #c7b27a;
+    --bg: #0b120d;
+    --surface: #121a15;
+    --surface-2: #18231c;
+    --ink: #e8f0e8;
+    --muted: #a3b5a6;
+    --line: #2a382e;
+    --control-border: #7c8c80;
+    --focus: #ecde34;
+    --water-soft: #12302d;
+    --ok: #7fd39c;
+    --ok-soft: #153222;
+    --warn: #f2d35b;
+    --warn-soft: #3a3000;
+    --danger: #ff9a90;
+    --danger-soft: #3b1e1c;
+    --info: #8cc8f0;
+    --info-soft: #14283a;
+    --cat-1: #1f3a1d; --cat-1-ink: #cfe9c9;
+    --cat-2: #12403b; --cat-2-ink: #bfe8e2;
+    --cat-3: #3f3a0a; --cat-3-ink: #efe69a;
+    --cat-4: #3b3320; --cat-4-ink: #e6d9b3;
+    --cat-5: #163549; --cat-5-ink: #bcd9f0;
+    --cat-6: #47231f; --cat-6-ink: #f3c9c2;
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-2: 0 4px 12px rgb(0 0 0 / 0.45);
+    --shadow-3: 0 14px 40px rgb(0 0 0 / 0.6);
+  }
+}
+
+@layer components {
+  header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .bar { display:flex; align-items:center; gap: var(--space-4); padding-block: var(--space-3); flex-wrap: wrap; }
+  .brand { display:flex; align-items:center; gap: var(--space-3); margin-right:auto; }
+  .brand img { width: 48px; height: 48px; }
+  .brand b { font: 800 var(--fs-600) var(--font-display); letter-spacing:-.03em; line-height:1; display:block; }
+  .brand small { color: var(--muted); font-size: var(--fs-300); }
+  section { padding-block: var(--space-6); }
+  h2 { margin-bottom: var(--space-4); }
+  .grid { display:grid; gap: var(--space-4); }
+  .swatches { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .sw { display:flex; gap: var(--space-3); align-items:center; background: var(--surface); border:1px solid var(--line); border-radius: var(--radius-m); padding: var(--space-3); }
+  .chip { width: 3rem; height: 3rem; border-radius: var(--radius-s); border:1px solid var(--line); flex:none; }
+  code { font-size: .8rem; color: var(--muted); }
+  .btn { min-height: var(--target); padding: 0 var(--space-5); border: 0; border-radius: var(--radius-m); font-weight: 700; cursor:pointer; background: var(--brand); color: var(--on-brand); }
+  .btn:hover { background: var(--brand-hover); }
+  .btn.accent { background: var(--accent); color: var(--on-accent); }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--control-border); }
+  .row { display:flex; gap: var(--space-3); flex-wrap:wrap; align-items:center; }
+  .card { background: var(--surface); border:1px solid var(--line); border-radius: var(--radius-l); box-shadow: var(--shadow-1); padding: var(--space-5); }
+  .tiles { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .tile { border-radius: var(--radius-m); padding: var(--space-4); min-height: 90px; display:flex; align-items:flex-end; }
+  .tag { background: var(--accent); color: var(--on-accent); font-weight:700; font-size: var(--fs-300); padding: .15rem .6rem; border-radius: var(--radius-s); }
+  label.f { display:block; font-weight:600; margin-bottom: var(--space-1); }
+  input.f { width:100%; min-height: var(--target); padding: 0 var(--space-3); background: var(--surface); border: 1.5px solid var(--control-border); border-radius: var(--radius-m); }
+  .alert { padding: var(--space-3) var(--space-4); border-radius: var(--radius-m); font-weight:500; }
+  .a-ok { background: var(--ok-soft); color: var(--ok); } .a-warn { background: var(--warn-soft); color: var(--warn); }
+  .a-err { background: var(--danger-soft); color: var(--danger); } .a-info { background: var(--info-soft); color: var(--info); }
+  .logos { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .logobox { border-radius: var(--radius-l); padding: var(--space-5); display:grid; place-items:center; gap: var(--space-3); border:1px solid var(--line); text-align:center; }
+  .logobox img { max-height: 190px; width:auto; }
+  .on-light { background:#fff; color:#171716; } .on-dark { background:#121a15; color:#e8f0e8; }
+}
+</style></head>
+<body>
+<a class="lv-skip-link" href="#contenido">Saltar al contenido</a>
+<header class="top"><div class="lv-container bar">
+  <div class="brand"><img src="../../frontend/projects/tienda/public/logo-emblema.png" alt=""><span><b>La Viñuela</b><small>Supermercado de la sierra</small></span></div>
+  <button class="btn ghost" id="theme" aria-pressed="false">Modo oscuro</button>
+  <button class="btn">Carrito · 24,80 €</button>
+</div></header>
+<main id="contenido" class="lv-container">
+  <section><h1>Paleta y sistema de diseño</h1>
+    <p style="max-width:62ch;margin-top:var(--space-3)">Colores tomados del logotipo: el verde del lettering, el amarillo del anillo, el agua del embalse y el marrón del tronco. Todos los pares de texto y fondo cumplen WCAG 2.2 AA (comprobado con <code>tools/check-contrast.mjs</code>).</p></section>
+  <section><h2>Colores</h2><div class="grid swatches"><div class="sw"><span class="chip" style="background:var(--brand)"></span><span><b>Verde marca</b><br><code>--brand</code> <code>#007924</code></span></div><div class="sw"><span class="chip" style="background:var(--brand-hover)"></span><span><b>Verde oscuro (hover)</b><br><code>--brand-hover</code> <code>#005f1c</code></span></div><div class="sw"><span class="chip" style="background:var(--brand-soft)"></span><span><b>Verde suave</b><br><code>--brand-soft</code> <code>#e5f3e7</code></span></div><div class="sw"><span class="chip" style="background:var(--accent)"></span><span><b>Amarillo del anillo</b><br><code>--accent</code> <code>#ecde34</code></span></div><div class="sw"><span class="chip" style="background:var(--water)"></span><span><b>Agua del embalse</b><br><code>--water</code> <code>#9ad9d1</code></span></div><div class="sw"><span class="chip" style="background:var(--earth)"></span><span><b>Tierra del tronco</b><br><code>--earth</code> <code>#6d5d34</code></span></div><div class="sw"><span class="chip" style="background:var(--ink)"></span><span><b>Tinta</b><br><code>--ink</code> <code>#171716</code></span></div><div class="sw"><span class="chip" style="background:var(--muted)"></span><span><b>Texto secundario</b><br><code>--muted</code> <code>#566358</code></span></div><div class="sw"><span class="chip" style="background:var(--bg)"></span><span><b>Fondo</b><br><code>--bg</code> <code>#f4f7f2</code></span></div><div class="sw"><span class="chip" style="background:var(--surface)"></span><span><b>Superficie</b><br><code>--surface</code> <code>#ffffff</code></span></div><div class="sw"><span class="chip" style="background:var(--ok)"></span><span><b>Éxito</b><br><code>--ok</code> <code>#1b6b34</code></span></div><div class="sw"><span class="chip" style="background:var(--warn)"></span><span><b>Aviso</b><br><code>--warn</code> <code>#7a5b00</code></span></div><div class="sw"><span class="chip" style="background:var(--danger)"></span><span><b>Error</b><br><code>--danger</code> <code>#b3261e</code></span></div><div class="sw"><span class="chip" style="background:var(--info)"></span><span><b>Información</b><br><code>--info</code> <code>#1c5e8c</code></span></div></div></section>
+  <section><h2>Botones, etiquetas y campos</h2>
+    <div class="card"><div class="row"><button class="btn">Añadir al carrito</button><button class="btn accent">Ver ofertas</button><button class="btn ghost">Cancelar</button><span class="tag">Oferta</span></div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:var(--space-5)">
+        <div><label class="f" for="d">Dirección de entrega</label><input class="f" id="d" value="Ruta de las Pasas, 28, Torre del Mar"></div>
+        <div><label class="f" for="e">Campo con foco (pulsa Tab)</label><input class="f" id="e" placeholder="Pulsa Tab hasta aquí"></div></div></div></section>
+  <section><h2>Avisos</h2><div class="grid" style="gap:var(--space-3)">
+    <div class="alert a-ok">Pedido confirmado. Te llegará en 1–3 días.</div><div class="alert a-warn">Quedan pocas unidades de este producto.</div>
+    <div class="alert a-err">No podemos repartir a esa dirección: está fuera de la zona.</div><div class="alert a-info">El envío es gratis a partir de 60 €.</div></div></section>
+  <section><h2>Colores de categoría (marcador de las fotos)</h2><div class="grid tiles"><div class="tile" style="background:var(--cat-1);color:var(--cat-1-ink)"><b>Frutas y verduras</b></div><div class="tile" style="background:var(--cat-2);color:var(--cat-2-ink)"><b>Carne y pescado</b></div><div class="tile" style="background:var(--cat-3);color:var(--cat-3-ink)"><b>Lácteos y huevos</b></div><div class="tile" style="background:var(--cat-4);color:var(--cat-4-ink)"><b>Despensa</b></div><div class="tile" style="background:var(--cat-5);color:var(--cat-5-ink)"><b>Bebidas</b></div><div class="tile" style="background:var(--cat-6);color:var(--cat-6-ink)"><b>Hogar</b></div></div></section>
+  <section><h2>El logotipo</h2><div class="grid logos">
+    <div class="logobox on-light"><img src="../../frontend/projects/tienda/public/logo-completo.png" alt="Supermercado La Viñuela"><small>Logo completo · fondo claro</small></div>
+    <div class="logobox on-light"><img src="../../frontend/projects/tienda/public/logo-emblema.png" alt="" style="max-height:130px"><small>Emblema · cabecera y favicon</small></div>
+    <div class="logobox on-dark"><img src="../../frontend/projects/tienda/public/logo-emblema.png" alt="" style="max-height:130px"><small>Emblema sobre fondo oscuro</small></div></div></section>
+</main>
+<script>
+  const b = document.getElementById('theme');
+  b.addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme !== 'dark';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    b.setAttribute('aria-pressed', dark); b.textContent = dark ? 'Modo claro' : 'Modo oscuro';
+  });
+</script></body></html>

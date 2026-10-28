@@ -43,7 +43,7 @@ class DatabaseMigrationTests {
     void appliesEveryMigration() {
         Integer applied = jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success = 1", Integer.class);
 
-        assertThat(applied).isEqualTo(11);
+        assertThat(applied).isEqualTo(12);
     }
 
     @Test
@@ -68,6 +68,8 @@ class DatabaseMigrationTests {
         assertThat(count("email_templates")).isEqualTo(6);
         assertThat(jdbc.queryForObject("SELECT setting_value FROM app_settings WHERE setting_key = 'delivery.max_km'", String.class))
                 .isEqualTo("40");
+        assertThat(jdbc.queryForObject("SELECT setting_value FROM app_settings WHERE setting_key = 'site.brand_color'", String.class))
+                .isEqualTo("#007924");
     }
 
     @Test
