@@ -36,3 +36,8 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 3
+    ignore:
+      # MySQL 8.4 LTS es una decisión de arquitectura (ADR-002): no se cambia de versión por una
+      # actualización automática. Un cambio de versión de la base de datos se hace a propósito.
+      - dependency-name: "mysql"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
