@@ -8,7 +8,7 @@ Los scripts con extensión `.sh` son para Linux y Mac. En Windows se usan los eq
 | --- | --- | --- |
 | JDK (por ejemplo Eclipse Temurin) | **25** | `java -version` debe decir 25 |
 | Maven | 3.9.6 o superior | `mvn -v` |
-| Node.js | LTS activa | `node -v` |
+| Node.js | **24.15 o superior** (Angular 22 lo exige; también vale 22.22.3 o 26) | `node -v` |
 | Docker Desktop | Abierto y en marcha | `docker version` |
 | Git (opcional, recomendado) | Cualquiera reciente | `git --version` |
 
@@ -76,6 +76,8 @@ Para parar el entorno:
 ```
 
 ## 6. Frontend (Angular)
+
+Si `node -v` da una versión anterior a 24.15, el script se detiene con un aviso de versión: actualiza Node desde https://nodejs.org (versión LTS) y vuelve a abrir PowerShell.
 
 Necesita Node.js e internet. Desde la carpeta raíz del proyecto:
 

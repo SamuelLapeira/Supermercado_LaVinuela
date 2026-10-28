@@ -85,12 +85,13 @@ lo toca, cumple accesibilidad si toca la interfaz y está documentada.
 
 | Historia | Contenido | Estado |
 | --- | --- | --- |
-| E0-01 | Estructura del repositorio y reglas de arquitectura | Hecha (frontend: ver [docs/frontend-bootstrap.md](docs/frontend-bootstrap.md)) |
+| E0-01 | Estructura del repositorio y reglas de arquitectura | Hecha |
 | E0-02 | Entorno local con Docker ([docs/local-environment.md](docs/local-environment.md)) | Hecha |
 | E0-03 | Migraciones y esquema de la base de datos ([docs/database.md](docs/database.md)) | Hecha |
 | E0-04 | Núcleo compartido: dinero, identificadores, errores, paginación y reloj | Hecha |
-| E0-07 | Integración continua | Siguiente |
+| E0-05 | Registros, métricas y comprobaciones de salud | Siguiente |
+| E0-06 | Base visual: tokens, capas CSS y componentes básicos | Pendiente |
+| E0-07 | Integración continua ([docs/ci.md](docs/ci.md)) | Hecha (OpenAPI y cliente generado: con el primer endpoint) |
 
-**Pendiente de verificar en una máquina con JDK 25, Maven y Docker:** `mvn verify` completo. El código se ha
-comprobado por partes (sintaxis, compilación estricta del núcleo y ejecución de sus reglas), pero no se ha
-podido ejecutar el proyecto entero.
+**Verificado:** `mvn verify` en el backend: 73 pruebas, 0 fallos, 0 saltadas (incluidas las de MySQL real).
+El frontend compila (`tienda` y `panel`) en modo estricto con Angular 22.

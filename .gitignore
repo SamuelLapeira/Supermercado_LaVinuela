@@ -1,5 +1,7 @@
 # Java / Maven
 backend/target/
+# Generado por Spring Modulith al ejecutar las pruebas
+build/
 *.class
 *.log
 hs_err_pid*
