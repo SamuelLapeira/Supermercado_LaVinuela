@@ -1,6 +1,7 @@
 # Actualizaciones automáticas de dependencias: una vez por semana, GitHub abre un pull request por cada
 # grupo de cambios. La integración continua los comprueba antes de aceptarlos (regla del proyecto:
 # versiones al día y sin APIs deprecadas, ver ADR-002).
+# Los saltos de versión MAYOR de las piezas centrales no se proponen: se hacen a propósito y con calma.
 version: 2
 updates:
   - package-ecosystem: maven
@@ -12,6 +13,9 @@ updates:
     groups:
       maven-parches-y-menores:
         update-types: [minor, patch]
+    ignore:
+      - dependency-name: "org.springframework.boot:*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
     directory: /frontend
@@ -22,6 +26,14 @@ updates:
     groups:
       npm-parches-y-menores:
         update-types: [minor, patch]
+    ignore:
+      # Angular exige una versión concreta de TypeScript y de sus paquetes: se actualizan con "ng update".
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@angular/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@angular-devkit/*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
