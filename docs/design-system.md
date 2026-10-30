@@ -79,10 +79,10 @@ oscura. Así nadie puede dejar la tienda ilegible.
 
 ## Tipografía
 
-Se usarán dos familias de licencia abierta (OFL), **autoalojadas** (no se cargan de Google, para no enviar la IP
-del visitante a terceros): **Bricolage Grotesque** para títulos y **Figtree** para el texto. Mientras no estén
-instaladas, el diseño usa la tipografía del sistema, y ya se ve bien. Se instalan con las dependencias
-`@fontsource-variable/figtree` y `@fontsource-variable/bricolage-grotesque` en la parte 2 de esta historia.
+Dos familias de licencia abierta (OFL), **autoalojadas** (no se cargan de Google, para no enviar la IP del visitante
+a terceros): **Bricolage Grotesque** para títulos y **Figtree** para el texto. Se instalan con los paquetes
+`@fontsource-variable/figtree` y `@fontsource-variable/bricolage-grotesque`, y `tools/install-fonts.mjs` las añade
+a las dos aplicaciones. Mientras no estén instaladas, el diseño usa la tipografía del sistema.
 
 ## Accesibilidad incluida desde ya
 
@@ -97,8 +97,36 @@ instaladas, el diseño usa la tipografía del sistema, y ya se ve bien. Se insta
 `tools/apply-brand-assets.mjs` hace que `tienda` y `panel` carguen el sistema de diseño (`@use` de la librería
 `ui` en su `styles.scss`) y ajusta su `index.html` (idioma, título, color del navegador, icono de iOS).
 
-## Qué falta (parte 2 de E0-06)
+## Componentes de la librería `ui`
 
-Componentes de la librería `ui` (botón, campo, tarjeta, aviso, etiqueta, selector de cantidad, diálogo,
-cajón lateral...), las estructuras de página de la tienda (cabecera, pie, carrito lateral) y del panel (menú
-lateral), y la página de componentes con todos sus estados.
+Todos son *standalone*, con `OnPush`, entradas con signals y prefijo `lv`. Los estilos están en
+`frontend/projects/ui/src/styles/_components.scss` (capa `components`) y solo usan tokens.
+
+| Componente | Uso | Accesibilidad |
+| --- | --- | --- |
+| `lvButton` (directiva) | `<button lvButton="accent" lvSize="large" lvBlock>`. Variantes: `primary` (por defecto), `accent`, `ghost`, `danger`. Vale también para `<a>` | Altura mínima 44 px; foco visible; desactivado con `disabled` |
+| `<lv-badge variant="offer">` | Etiquetas: `offer`, `age`, `neutral`, `ok`, `warn`, `danger` | Texto siempre legible (contraste comprobado) |
+| `<lv-alert variant="danger">` | Avisos: `ok`, `warn`, `danger`, `info` | `danger` se anuncia al instante (`role="alert"`), el resto con educación (`role="status"`). Siempre con icono: el estado no depende solo del color |
+| `<lv-field label hint error required>` + `lvControl` | Campo con etiqueta, ayuda y error sobre `input`, `textarea` o `select` | Etiqueta visible enlazada al control, `aria-describedby`, `aria-invalid`, `aria-required` automáticos; el error se anuncia |
+| `<lv-quantity-stepper itemName max [(value)]>` | Selector de cantidad de las tarjetas de producto | Botones con nombre propio («Añadir una unidad de Leche entera»), valor anunciado, límites respetados |
+| `<lv-logo name tagline>` | Emblema más nombre | El nombre es texto real; el emblema es decorativo |
+| Clases `lv-card`, `lv-price`, `lv-tile--1..6`, `lv-stack`, `lv-row`, `lv-grid-auto` | Tarjeta, precio, marcador de categoría y utilidades de maquetación | — |
+
+Todos tienen pruebas con TestBed (`*.spec.ts`).
+
+### Para verlos
+
+La tienda tiene una página interna con todos los componentes y sus estados, en `/componentes`:
+
+```powershell
+cd frontend
+npx.cmd ng serve tienda --host 127.0.0.1
+```
+
+y abrir `http://127.0.0.1:4200`. Recórrela con la tecla Tab para comprobar el foco.
+
+## Qué falta
+
+Componentes que llegan con las pantallas que los necesitan: diálogo y cajón lateral (carrito), menú, pestañas,
+tabla del panel, paginación, notificaciones emergentes (*toast*) y esqueletos de carga. La cabecera y el pie de la
+tienda y el menú lateral del panel se construyen con el catálogo y con las primeras pantallas del panel.

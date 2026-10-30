@@ -90,7 +90,7 @@ lo toca, cumple accesibilidad si toca la interfaz y está documentada.
 | E0-03 | Migraciones y esquema de la base de datos ([docs/database.md](docs/database.md)) | Hecha |
 | E0-04 | Núcleo compartido: dinero, identificadores, errores, paginación y reloj | Hecha |
 | E0-05 | Registros, métricas y comprobaciones de salud ([docs/observability.md](docs/observability.md)) | Hecha |
-| E0-06 | Base visual ([docs/design-system.md](docs/design-system.md)) | En curso: identidad, tokens y capas hechos; faltan los componentes |
+| E0-06 | Base visual y componentes ([docs/design-system.md](docs/design-system.md)) | Hecha |
 | E0-07 | Integración continua ([docs/ci.md](docs/ci.md)) | Hecha (OpenAPI y cliente generado: con el primer endpoint) |
 
 **Verificado:** `mvn verify` en el backend (incluidas las pruebas de MySQL real, salud y métricas).

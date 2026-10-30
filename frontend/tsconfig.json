@@ -13,16 +13,16 @@
     "module": "preserve",
     "paths": {
       "api": [
-        "./dist/api"
+        "./projects/api/src/public-api.ts"
       ],
       "core": [
-        "./dist/core"
+        "./projects/core/src/public-api.ts"
       ],
       "ui": [
-        "./dist/ui"
+        "./projects/ui/src/public-api.ts"
       ],
       "util": [
-        "./dist/util"
+        "./projects/util/src/public-api.ts"
       ]
     },
     "strict": true,

@@ -1,0 +1,25 @@
+.page {
+  padding-block: var(--space-6) var(--space-9);
+}
+
+.intro {
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+section {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.product {
+  max-width: 16rem;
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}

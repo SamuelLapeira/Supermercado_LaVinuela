@@ -1,0 +1,90 @@
+<div class="lv-container page">
+  <header class="lv-stack">
+    <lv-logo tagline="Supermercado de la sierra" />
+    <h1>Componentes del sistema de diseño</h1>
+    <p class="intro">
+      Todos los componentes de La Viñuela y sus estados. Pulsa Tab para recorrerlos con el teclado: el foco
+      siempre se ve. Cambia entre modo claro y oscuro desde los ajustes de tu sistema.
+    </p>
+  </header>
+
+  <section aria-labelledby="botones">
+    <h2 id="botones">Botones</h2>
+    <div class="lv-row">
+      <button lvButton type="button">Añadir al carrito</button>
+      <button lvButton="accent" type="button">Ver ofertas</button>
+      <button lvButton="ghost" type="button">Cancelar</button>
+      <button lvButton="danger" type="button">Vaciar carrito</button>
+      <button lvButton type="button" disabled>No disponible</button>
+      <a lvButton="ghost" href="#botones">Un enlace con aspecto de botón</a>
+    </div>
+    <div class="lv-row">
+      <button lvButton lvSize="large" type="button">Pagar 32,29 €</button>
+    </div>
+    <button lvButton lvBlock type="button">Botón a todo el ancho</button>
+  </section>
+
+  <section aria-labelledby="etiquetas">
+    <h2 id="etiquetas">Etiquetas</h2>
+    <div class="lv-row">
+      <lv-badge variant="offer">Oferta</lv-badge>
+      <lv-badge variant="age">+18</lv-badge>
+      <lv-badge>Producto local</lv-badge>
+      <lv-badge variant="ok">Disponible</lv-badge>
+      <lv-badge variant="warn">Quedan pocas</lv-badge>
+      <lv-badge variant="danger">Agotado</lv-badge>
+    </div>
+  </section>
+
+  <section aria-labelledby="avisos">
+    <h2 id="avisos">Avisos</h2>
+    <lv-alert variant="ok">Pedido confirmado. Te llegará entre el jueves 29 y el sábado 31 de octubre.</lv-alert>
+    <lv-alert variant="warn">Quedan pocas unidades de este producto.</lv-alert>
+    <lv-alert variant="danger">No podemos repartir a esa dirección: está fuera de la zona de reparto.</lv-alert>
+    <lv-alert variant="info">El envío es gratis a partir de 60 €.</lv-alert>
+  </section>
+
+  <section aria-labelledby="campos">
+    <h2 id="campos">Campos de formulario</h2>
+    <div class="fields">
+      <lv-field label="Dirección de entrega" hint="Calle, número y localidad" required>
+        <input lvControl autocomplete="street-address" />
+      </lv-field>
+      <lv-field label="Código postal" error="Introduce un código postal de 5 cifras.">
+        <input lvControl inputmode="numeric" autocomplete="postal-code" value="2971" />
+      </lv-field>
+      <lv-field label="Notas para el repartidor">
+        <textarea lvControl></textarea>
+      </lv-field>
+      <lv-field label="Provincia">
+        <select lvControl>
+          <option>Málaga</option>
+          <option>Granada</option>
+        </select>
+      </lv-field>
+    </div>
+  </section>
+
+  <section aria-labelledby="cantidad">
+    <h2 id="cantidad">Selector de cantidad y tarjeta de producto</h2>
+    <article class="lv-card product">
+      <div class="lv-tile lv-tile--3">1 L</div>
+      <div class="lv-card__body">
+        <h3>Leche entera</h3>
+        <span class="lv-muted">Lácteos y huevos · 0,95 €/L</span>
+        <p class="lv-price">0,95 € <s>1,10 €</s></p>
+        <lv-quantity-stepper itemName="Leche entera" [max]="12" [(value)]="quantity" />
+        <p class="lv-muted" aria-live="polite">Cantidad elegida: {{ quantity() }}</p>
+      </div>
+    </article>
+  </section>
+
+  <section aria-labelledby="categorias">
+    <h2 id="categorias">Marcadores de categoría</h2>
+    <div class="lv-grid-auto">
+      @for (category of categories; track category.id) {
+        <div class="lv-tile" [class]="'lv-tile lv-tile--' + category.id">{{ category.name }}</div>
+      }
+    </div>
+  </section>
+</div>

@@ -88,6 +88,19 @@ npx.cmd ng build tienda
 npx.cmd ng build panel
 ```
 
+Para ver una aplicación en el navegador:
+
+```powershell
+cd frontend
+npx.cmd ng serve tienda --host 127.0.0.1
+```
+
+y abrir `http://127.0.0.1:4200` (se para con Ctrl+C). El `--host 127.0.0.1` evita un fallo habitual de Windows en
+el que `localhost` no responde. `tienda` y `panel` no pueden ir a la vez en el mismo puerto.
+
+**Cuidado con la carpeta:** los scripts de `tools` se ejecutan desde la raíz del proyecto y los comandos `ng` desde
+`frontend`. Escribir `Get-Location` al final de cada bloque te dice dónde estás antes de pegar el siguiente.
+
 Esto crea la carpeta `frontend` con las aplicaciones `tienda` y `panel` y las librerías `ui`, `core`, `api` y
 `util`. Si algún parámetro del generador no existiera en la versión de Angular instalada, el script se
 detiene con un mensaje; pégamelo y lo ajusto.

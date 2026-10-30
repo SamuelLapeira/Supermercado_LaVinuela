@@ -60,8 +60,8 @@ excluida del lint hasta que la historia E0-06 la sustituya.
 1. **Modo sin Zone.js (zoneless) y `OnPush`**: se confirma con la versión instalada de Angular y se verifica
    que las librerías previstas lo soportan (decisión registrada en la Fase 4, riesgo 1).
 2. **`exactOptionalPropertyTypes`**: se activa cuando el esqueleto compile limpio.
-3. **Rutas de las librerías**: `ng generate library` las apunta a `dist/<librería>`, lo que obliga a compilar
-   las librerías antes que las aplicaciones. Cuando las aplicaciones empiecen a usarlas (historia E0-06) se
-   cambiarán a las fuentes (`projects/<librería>/src/public-api.ts`).
+3. ~~**Rutas de las librerías**~~ Hecho en E0-06: `tools/link-libraries.mjs` apunta `ui`, `core`, `api` y `util`
+   a su código fuente (`projects/<librería>/src/public-api.ts`), de modo que las aplicaciones no necesitan que la
+   librería esté compilada antes.
 4. **Cliente OpenAPI** en `api`: se genera con el primer endpoint real (historia E1-01).
-5. **Tokens y capas de CSS** en `ui`: historia E0-06.
+5. ~~**Tokens y capas de CSS** en `ui`~~ Hecho en E0-06 (ver `docs/design-system.md`).

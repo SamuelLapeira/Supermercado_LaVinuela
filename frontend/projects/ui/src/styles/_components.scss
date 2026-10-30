@@ -1,0 +1,319 @@
+// Estilos de los componentes de la librería ui. Solo usan tokens (variables de _tokens.scss).
+// Van en la capa "components": ganan al reinicio y a los estilos base, y pierden frente a los estilos
+// encapsulados de cada componente de Angular, que son más específicos de cada pantalla.
+
+@layer components {
+  // ------------------------------------------------------------------ botón (directiva lvButton)
+  .lv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--target);
+    padding: 0 var(--space-5);
+    border: 2px solid transparent;
+    border-radius: var(--radius-m);
+    background: var(--brand);
+    color: var(--on-brand);
+    font: 700 var(--fs-400) / 1.1 var(--font-body);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-s) var(--ease),
+      border-color var(--dur-s) var(--ease);
+  }
+  .lv-btn:hover {
+    background: var(--brand-hover);
+    text-decoration: none;
+  }
+  .lv-btn--accent {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .lv-btn--accent:hover {
+    background: var(--accent);
+    filter: brightness(0.94);
+  }
+  .lv-btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--control-border);
+  }
+  .lv-btn--ghost:hover {
+    background: var(--surface-2);
+  }
+  .lv-btn--danger {
+    background: transparent;
+    color: var(--danger);
+    border-color: var(--danger);
+  }
+  .lv-btn--danger:hover {
+    background: var(--danger-soft);
+  }
+  .lv-btn--large {
+    min-height: 3.25rem;
+    padding: 0 var(--space-6);
+    font-size: var(--fs-500);
+  }
+  .lv-btn--block {
+    display: flex;
+    width: 100%;
+  }
+  .lv-btn:disabled,
+  .lv-btn[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // ------------------------------------------------------------------ etiqueta (lv-badge)
+  .lv-badge {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: var(--radius-s);
+    font-size: var(--fs-300);
+    font-weight: 700;
+    line-height: 1.4;
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .lv-badge--offer {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .lv-badge--age {
+    background: var(--ink);
+    color: var(--surface);
+  }
+  .lv-badge--ok {
+    background: var(--ok-soft);
+    color: var(--ok);
+  }
+  .lv-badge--warn {
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+  .lv-badge--danger {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+
+  // ------------------------------------------------------------------ aviso (lv-alert)
+  .lv-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-m);
+    font-weight: 500;
+  }
+  .lv-alert__icon {
+    flex: none;
+    padding-top: 0.1rem;
+  }
+  .lv-alert__body {
+    min-width: 0;
+  }
+  .lv-alert--ok {
+    background: var(--ok-soft);
+    color: var(--ok);
+  }
+  .lv-alert--warn {
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+  .lv-alert--danger {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+  .lv-alert--info {
+    background: var(--info-soft);
+    color: var(--info);
+  }
+
+  // ------------------------------------------------------------------ campo de formulario (lv-field + lvControl)
+  .lv-field {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+  }
+  .lv-field__label {
+    font-weight: 600;
+  }
+  .lv-field__required {
+    margin-left: 0.2em;
+    color: var(--danger);
+  }
+  .lv-field__hint {
+    color: var(--muted);
+    font-size: var(--fs-300);
+  }
+  .lv-field__error {
+    color: var(--danger);
+    font-size: var(--fs-300);
+    font-weight: 600;
+  }
+  .lv-control {
+    width: 100%;
+    min-height: var(--target);
+    padding: var(--space-2) var(--space-3);
+    background: var(--surface);
+    color: var(--ink);
+    border: 1.5px solid var(--control-border);
+    border-radius: var(--radius-m);
+  }
+  textarea.lv-control {
+    min-height: 6rem;
+    resize: vertical;
+  }
+  .lv-control::placeholder {
+    color: var(--muted);
+  }
+  .lv-control[aria-invalid="true"] {
+    border-color: var(--danger);
+    border-width: 2px;
+  }
+  .lv-control:disabled {
+    background: var(--surface-2);
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  // ------------------------------------------------------------------ selector de cantidad (lv-quantity-stepper)
+  .lv-stepper {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 3px;
+    border-radius: var(--radius-pill);
+    background: var(--brand);
+    color: var(--on-brand);
+  }
+  .lv-stepper__btn {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.18);
+    color: inherit;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lv-stepper__btn:hover:not(:disabled) {
+    background: rgb(255 255 255 / 0.3);
+  }
+  .lv-stepper__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .lv-stepper__btn:focus-visible {
+    outline-color: var(--accent);
+  }
+  .lv-stepper__value {
+    min-width: 2.5ch;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  // ------------------------------------------------------------------ logotipo (lv-logo)
+  .lv-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .lv-logo__mark {
+    flex: none;
+    border-radius: 50%;
+  }
+  .lv-logo__text {
+    display: grid;
+    line-height: 1.1;
+  }
+  .lv-logo__text strong {
+    font: 800 var(--fs-600) / 1 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+  .lv-logo__text small {
+    margin-top: 0.2rem;
+    color: var(--muted);
+    font-size: var(--fs-300);
+  }
+
+  // ------------------------------------------------------------------ tarjeta y precio
+  .lv-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+  }
+  .lv-card__body {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+  }
+  .lv-price {
+    font: 800 var(--fs-600) / 1.1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .lv-price s {
+    margin-left: var(--space-2);
+    color: var(--muted);
+    font: 400 var(--fs-300) var(--font-body);
+  }
+  .lv-muted {
+    color: var(--muted);
+    font-size: var(--fs-300);
+  }
+
+  // ------------------------------------------------------------------ marcador de foto por categoría
+  .lv-tile {
+    display: flex;
+    align-items: flex-end;
+    min-height: 7rem;
+    padding: var(--space-3) var(--space-4);
+    font: 800 var(--fs-500) / 1.15 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .lv-grid-auto > .lv-tile {
+    border-radius: var(--radius-m);
+  }
+  .lv-tile--1 { background: var(--cat-1); color: var(--cat-1-ink); }
+  .lv-tile--2 { background: var(--cat-2); color: var(--cat-2-ink); }
+  .lv-tile--3 { background: var(--cat-3); color: var(--cat-3-ink); }
+  .lv-tile--4 { background: var(--cat-4); color: var(--cat-4-ink); }
+  .lv-tile--5 { background: var(--cat-5); color: var(--cat-5-ink); }
+  .lv-tile--6 { background: var(--cat-6); color: var(--cat-6-ink); }
+}
+
+@layer utilities {
+  .lv-stack {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+  }
+  .lv-stack--lg {
+    gap: var(--space-6);
+  }
+  .lv-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .lv-grid-auto {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  }
+  .lv-section {
+    padding-block: var(--space-6);
+  }
+}

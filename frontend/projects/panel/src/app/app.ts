@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+/** Estructura del panel de gestión: enlace «Saltar al contenido» y la página activa. El menú lateral llegará con las primeras pantallas. */
 @Component({
-  imports: [RouterOutlet],
   selector: 'lv-root',
-  styleUrl: './app.scss',
+  imports: [RouterOutlet],
   templateUrl: './app.html',
+  styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {
-  protected readonly title = signal('panel');
-}
+export class App {}

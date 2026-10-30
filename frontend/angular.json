@@ -30,6 +30,8 @@
               }
             ],
             "styles": [
+              "node_modules/@fontsource-variable/figtree/index.css",
+              "node_modules/@fontsource-variable/bricolage-grotesque/index.css",
               "projects/tienda/src/styles.scss"
             ]
           },
@@ -107,6 +109,8 @@
               }
             ],
             "styles": [
+              "node_modules/@fontsource-variable/figtree/index.css",
+              "node_modules/@fontsource-variable/bricolage-grotesque/index.css",
               "projects/panel/src/styles.scss"
             ]
           },
