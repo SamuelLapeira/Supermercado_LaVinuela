@@ -5,6 +5,11 @@ spring:
     url: jdbc:tc:mysql:8.4:///shop?TC_MY_CNF=mysql-conf
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
 
+app:
+  identity:
+    # Clave fija solo para las pruebas (en la aplicación real llega por variable de entorno).
+    code-pepper: clave-secreta-solo-para-pruebas-0123456789abcdef
+
 logging:
   level:
     com.lavinuela.shop: INFO

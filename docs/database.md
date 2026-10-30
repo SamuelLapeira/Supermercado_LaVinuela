@@ -24,6 +24,7 @@ Están en `backend/src/main/resources/db/migration`.
 | `V010__immutability_triggers.sql` | Registros que no se pueden modificar ni borrar |
 | `V100__seed_reference_data.sql` | Roles, permisos, IVA, alérgenos, tarifas, ajustes, banner, páginas legales (borrador) y plantillas de correo |
 | `V101__brand_from_logo.sql` | El color principal por defecto pasa a ser el verde del logotipo (`#007924`) |
+| `V102__registration_with_verification_code.sql` | Registro con código: nombre y apellidos opcionales, `users.username` único, intentos fallidos en los códigos y plantillas de correo con código |
 
 Resultado: **53 tablas** de negocio más la de historial de Flyway.
 

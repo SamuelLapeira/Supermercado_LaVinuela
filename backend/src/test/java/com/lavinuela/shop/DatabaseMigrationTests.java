@@ -43,7 +43,7 @@ class DatabaseMigrationTests {
     void appliesEveryMigration() {
         Integer applied = jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success = 1", Integer.class);
 
-        assertThat(applied).isEqualTo(12);
+        assertThat(applied).isEqualTo(13);
     }
 
     @Test
@@ -65,7 +65,7 @@ class DatabaseMigrationTests {
         assertThat(count("tax_rates")).isEqualTo(3);
         assertThat(count("allergens")).isEqualTo(14);
         assertThat(count("delivery_fee_bands")).isEqualTo(4);
-        assertThat(count("email_templates")).isEqualTo(6);
+        assertThat(count("email_templates")).isEqualTo(7);
         assertThat(jdbc.queryForObject("SELECT setting_value FROM app_settings WHERE setting_key = 'delivery.max_km'", String.class))
                 .isEqualTo("40");
         assertThat(jdbc.queryForObject("SELECT setting_value FROM app_settings WHERE setting_key = 'site.brand_color'", String.class))
@@ -174,6 +174,33 @@ class DatabaseMigrationTests {
     }
 
     // ------------------------------------------------------------------ pedidos y pagos
+
+    @Test
+    void usernameIsUniqueIgnoringCaseAndAccountsDoNotNeedARealName() {
+        String unique = publicId().toLowerCase().substring(10); // 16 caracteres: el usuario admite 30
+        jdbc.update("INSERT INTO users (public_id, email, username, password_hash) VALUES (?, ?, ?, 'hash')",
+                publicId(), "a-" + unique + "@example.com", "Samuel." + unique);
+
+        assertRejected(() -> jdbc.update("INSERT INTO users (public_id, email, username, password_hash) VALUES (?, ?, ?, 'hash')",
+                publicId(), "b-" + unique + "@example.com", "samuel." + unique));
+    }
+
+    @Test
+    void verificationCodesCountFailedAttemptsStartingAtZero() {
+        long user = insertUser("codes-" + publicId().toLowerCase() + "@example.com");
+        jdbc.update("INSERT INTO user_tokens (user_id, token_type, token_hash, expires_at) VALUES (?, 'EMAIL_VERIFICATION', ?, NOW(3))",
+                user, "f".repeat(64));
+
+        assertThat(jdbc.queryForObject("SELECT failed_attempts FROM user_tokens WHERE user_id = ?", Integer.class, user)).isZero();
+    }
+
+    @Test
+    void emailTemplatesUseACodeForVerificationAndHaveTheAccountExistsNotice() {
+        assertThat(jdbc.queryForObject("SELECT body_text FROM email_templates WHERE code = 'EMAIL_VERIFICATION'", String.class))
+                .contains("{{code}}").doesNotContain("{{link}}");
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM email_templates WHERE code = 'ACCOUNT_EXISTS'", Integer.class))
+                .isEqualTo(1);
+    }
 
     @Test
     void orderTotalMustMatchItsComponents() {

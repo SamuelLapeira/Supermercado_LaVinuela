@@ -37,6 +37,13 @@ if (-not (Test-Path .env)) {
     [System.IO.File]::WriteAllLines($path, [string[]]$lines, (New-Object System.Text.UTF8Encoding($false)))
 }
 
+# Clave secreta de los códigos de verificación de correo. Si .env ya existía de antes, se añade ahora.
+$envPath = Join-Path (Get-Location) '.env'
+if (-not (Select-String -Path $envPath -Pattern '^APP_CODE_PEPPER=' -Quiet)) {
+    $pepper = "`nAPP_CODE_PEPPER=" + (New-RandomPassword 48) + "`n"
+    [System.IO.File]::AppendAllText($envPath, $pepper, (New-Object System.Text.UTF8Encoding($false)))
+}
+
 Write-Host '>> Arrancando contenedores...'
 docker compose up -d --wait
 if ($LASTEXITCODE -ne 0) { throw 'Docker Compose ha fallado. Revisa que Docker Desktop esté abierto.' }

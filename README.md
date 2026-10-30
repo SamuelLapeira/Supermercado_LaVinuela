@@ -93,5 +93,12 @@ lo toca, cumple accesibilidad si toca la interfaz y está documentada.
 | E0-06 | Base visual y componentes ([docs/design-system.md](docs/design-system.md)) | Hecha |
 | E0-07 | Integración continua ([docs/ci.md](docs/ci.md)) | Hecha (OpenAPI y cliente generado: con el primer endpoint) |
 
+### Sprint 2: cuentas
+
+| Historia | Contenido | Estado |
+| --- | --- | --- |
+| E1-01 | Registro con usuario, contraseña y código de verificación por correo ([docs/identity.md](docs/identity.md)) | Servidor hecho; falta la pantalla del registro |
+| E1-02 | Iniciar y cerrar sesión | Siguiente |
+
 **Verificado:** `mvn verify` en el backend (incluidas las pruebas de MySQL real, salud y métricas).
 El frontend compila (`tienda` y `panel`) en modo estricto con Angular 22.

@@ -9,6 +9,21 @@ spring:
     url: ${DB_URL}
     user: ${DB_MIGRATE_USER}
     password: ${DB_MIGRATE_PASSWORD}
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+
+app:
+  identity:
+    code-pepper: ${APP_CODE_PEPPER}
+  mail:
+    from: ${APP_MAIL_FROM}
 
 management:
   server:

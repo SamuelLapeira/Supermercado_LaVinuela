@@ -10,6 +10,17 @@ spring:
     user: app_migrate
     password: ${DB_MIGRATE_PASSWORD}
 
+app:
+  identity:
+    # Clave secreta de los códigos de verificación. La genera ./tools/dev-up (APP_CODE_PEPPER en .env).
+    code-pepper: ${APP_CODE_PEPPER}
+
+spring:
+  mail:
+    # Mailpit (entorno local): recoge todos los correos sin enviarlos de verdad. Se ven en http://127.0.0.1:8025
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_SMTP_PORT:1025}
+
 management:
   server:
     # Los puntos de control van en un puerto aparte y solo accesible desde esta máquina.

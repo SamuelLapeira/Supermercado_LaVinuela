@@ -37,6 +37,18 @@ public enum ErrorCode {
     CONCURRENT_MODIFICATION(409, "Otra persona ha cambiado esto mientras lo editabas. Recarga la página y vuelve a intentarlo."),
     /** El pedido no puede pasar a ese estado ahora mismo. */
     ORDER_INVALID_TRANSITION(409, "El pedido no puede pasar a ese estado ahora mismo."),
+    /** Ese nombre de usuario ya está en uso. Elige otro. */
+    USERNAME_TAKEN(409, "Ese nombre de usuario ya está en uso. Elige otro."),
+
+    /** El código no es correcto. Revísalo e inténtalo de nuevo. */
+    VERIFICATION_CODE_INVALID(422, "El código no es correcto. Revísalo e inténtalo de nuevo."),
+
+    /** El código ha caducado. Pide uno nuevo. */
+    VERIFICATION_CODE_EXPIRED(422, "El código ha caducado. Pide uno nuevo."),
+
+    /** Has probado demasiados códigos. Pide uno nuevo. */
+    VERIFICATION_TOO_MANY_ATTEMPTS(429, "Has probado demasiados códigos. Pide uno nuevo."),
+
     /** Este pedido ya no se puede cancelar. */
     ORDER_NOT_CANCELLABLE(409, "Este pedido ya no se puede cancelar."),
     /** Esta dirección está fuera de nuestra zona de reparto. */
@@ -66,7 +78,10 @@ public enum ErrorCode {
     /** No hemos podido comunicarnos con el banco. Inténtalo de nuevo. */
     PAYMENT_GATEWAY_ERROR(502, "No hemos podido comunicarnos con el banco. Inténtalo de nuevo."),
     /** No podemos calcular el reparto ahora mismo. Inténtalo de nuevo en unos minutos. */
-    DELIVERY_SERVICE_UNAVAILABLE(503, "No podemos calcular el reparto ahora mismo. Inténtalo de nuevo en unos minutos.");
+    DELIVERY_SERVICE_UNAVAILABLE(503, "No podemos calcular el reparto ahora mismo. Inténtalo de nuevo en unos minutos."),
+
+    /** No hemos podido enviar el correo ahora mismo. */
+    EMAIL_SERVICE_UNAVAILABLE(503, "No hemos podido enviar el correo ahora mismo. Inténtalo de nuevo en unos minutos.");
 
     private final int httpStatus;
     private final String defaultMessage;

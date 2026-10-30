@@ -1,4 +1,4 @@
-package com.lavinuela.shop.shared.infrastructure.logging;
+package com.lavinuela.shop.shared.logging;
 
 import org.jspecify.annotations.Nullable;
 

@@ -62,6 +62,11 @@ management:
     java:
       enabled: true
 
+# Ajustes propios de la aplicación. Los secretos NO van aquí: llegan por variables de entorno.
+app:
+  mail:
+    from: ${APP_MAIL_FROM:no-reply@lavinuela.local}
+
 logging:
   pattern:
     # Todos los registros de una petición llevan su identificador de seguimiento.

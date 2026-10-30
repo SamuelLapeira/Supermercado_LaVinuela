@@ -17,6 +17,11 @@ if [ ! -f .env ]; then
   chmod 600 .env
 fi
 
+# Clave secreta de los códigos de verificación de correo. Si .env ya existía de antes, se añade ahora.
+if ! grep -q '^APP_CODE_PEPPER=' .env; then
+  echo "APP_CODE_PEPPER=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 48)" >> .env
+fi
+
 echo ">> Arrancando contenedores..."
 docker compose up -d --wait
 
