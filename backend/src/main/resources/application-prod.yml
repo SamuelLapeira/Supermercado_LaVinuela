@@ -19,6 +19,11 @@ spring:
       mail.smtp.starttls.enable: true
       mail.smtp.starttls.required: true
 
+springdoc:
+  api-docs:
+    # En producción el contrato no se publica: el documento está en el repositorio, no hace falta enseñarlo a internet.
+    enabled: false
+
 app:
   identity:
     code-pepper: ${APP_CODE_PEPPER}

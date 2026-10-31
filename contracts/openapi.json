@@ -1,0 +1,340 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "description" : "Contrato de la API de la tienda. Se genera solo a partir del código del servidor: no se edita a mano. El cliente de Angular se genera a partir de este documento.",
+    "title" : "API de Supermercado La Viñuela",
+    "version" : "0.1.0"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "tags" : [ {
+    "description" : "Registro de cuentas y verificación del correo electrónico",
+    "name" : "Cuentas"
+  } ],
+  "paths" : {
+    "/api/v1/auth/register" : {
+      "post" : {
+        "description" : "Crea la cuenta, que queda pendiente de verificar, y envía un código de 6 cifras al correo. La respuesta es la misma tanto si el correo era nuevo como si ya tenía cuenta, para no revelar quién está registrado.",
+        "operationId" : "registerAccount",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RegistrationResponse"
+                }
+              }
+            },
+            "description" : "Cuenta creada (o correo ya existente): el código está en camino"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description" : "Datos incorrectos (VALIDATION_FAILED): «errors» indica el campo"
+          },
+          "409" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description" : "El nombre de usuario ya está en uso (USERNAME_TAKEN)"
+          }
+        },
+        "summary" : "Crear una cuenta",
+        "tags" : [ "Cuentas" ]
+      }
+    },
+    "/api/v1/auth/resend-verification" : {
+      "post" : {
+        "description" : "Envía un código nuevo si la cuenta está pendiente y no se ha superado ningún límite (60 segundos entre envíos, 5 por hora). Responde siempre lo mismo, exista o no la cuenta.",
+        "operationId" : "resendVerification",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResendVerificationRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResendVerificationResponse"
+                }
+              }
+            },
+            "description" : "Petición recibida"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description" : "Correo con formato incorrecto (VALIDATION_FAILED)"
+          }
+        },
+        "summary" : "Pedir un código nuevo",
+        "tags" : [ "Cuentas" ]
+      }
+    },
+    "/api/v1/auth/verify-email" : {
+      "post" : {
+        "description" : "Activa la cuenta si el código es correcto. Cada código admite 5 intentos fallidos.",
+        "operationId" : "verifyEmail",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VerifyEmailRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Correo verificado: la cuenta está activa"
+          },
+          "400" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description" : "El código no tiene 6 cifras (VALIDATION_FAILED)"
+          },
+          "422" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description" : "Código incorrecto (VERIFICATION_CODE_INVALID) o caducado (VERIFICATION_CODE_EXPIRED)"
+          },
+          "429" : {
+            "content" : {
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description" : "Demasiados intentos con este código (VERIFICATION_TOO_MANY_ATTEMPTS): hay que pedir uno nuevo"
+          }
+        },
+        "summary" : "Verificar el correo con el código",
+        "tags" : [ "Cuentas" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "FieldError" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código técnico del error, si lo hay"
+          },
+          "field" : {
+            "type" : "string",
+            "description" : "Nombre del campo",
+            "example" : "password"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "Qué está mal, en español",
+            "example" : "La contraseña debe incluir al menos una mayúscula."
+          }
+        },
+        "required" : [ "field", "message" ]
+      },
+      "Problem" : {
+        "type" : "object",
+        "description" : "Error estándar de la API. Siempre lleva un «code» estable con el que el frontend decide qué mostrar.",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error estable (por ejemplo VALIDATION_FAILED, USERNAME_TAKEN)",
+            "example" : "VALIDATION_FAILED"
+          },
+          "detail" : {
+            "type" : "string",
+            "description" : "Mensaje pensado para mostrarse a la persona, en español y sin detalles técnicos"
+          },
+          "details" : {
+            "type" : "object",
+            "additionalProperties" : { },
+            "description" : "Datos adicionales de algunos errores"
+          },
+          "errors" : {
+            "type" : "array",
+            "description" : "Errores por campo (solo en VALIDATION_FAILED)",
+            "items" : {
+              "$ref" : "#/components/schemas/FieldError"
+            }
+          },
+          "instance" : {
+            "type" : "string",
+            "description" : "Dirección que ha producido el error"
+          },
+          "status" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Código HTTP",
+            "example" : 400
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "Resumen corto del error"
+          },
+          "traceId" : {
+            "type" : "string",
+            "description" : "Identificador de seguimiento de la petición: se le pide a quien reporta el problema"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "Identificador del tipo de error",
+            "example" : "urn:lavinuela:problem:validation-failed"
+          }
+        },
+        "required" : [ "code", "detail", "status", "title", "type" ]
+      },
+      "RegisterRequest" : {
+        "type" : "object",
+        "description" : "Datos para crear una cuenta",
+        "properties" : {
+          "acceptTerms" : {
+            "type" : "boolean",
+            "description" : "Debe ser verdadero: la persona acepta las condiciones y la política de privacidad",
+            "example" : true
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "Correo electrónico, donde se envía el código de verificación",
+            "example" : "ana@example.com",
+            "maxLength" : 254,
+            "minLength" : 0
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "Contraseña: de 10 a 128 caracteres, con al menos una mayúscula, una minúscula y un número",
+            "example" : "Una-contraseña-larga-2026",
+            "maxLength" : 512,
+            "minLength" : 0
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "Nombre de usuario: de 3 a 30 caracteres (letras, números, punto, guion y guion bajo). No distingue mayúsculas.",
+            "example" : "ana.lopez",
+            "maxLength" : 64,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "acceptTerms", "email", "password", "username" ]
+      },
+      "RegistrationResponse" : {
+        "type" : "object",
+        "description" : "Resultado del registro. Es igual tanto si el correo era nuevo como si ya existía.",
+        "properties" : {
+          "codeValiditySeconds" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Segundos que vale el código",
+            "example" : 900
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "Correo con la parte local oculta, para decir «te hemos enviado un código a a***@…»",
+            "example" : "a***@example.com"
+          },
+          "resendAfterSeconds" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Segundos que hay que esperar para pedir otro código",
+            "example" : 60
+          }
+        },
+        "required" : [ "codeValiditySeconds", "email", "resendAfterSeconds" ]
+      },
+      "ResendVerificationRequest" : {
+        "type" : "object",
+        "description" : "Petición de un código nuevo",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "Correo con el que se registró",
+            "example" : "ana@example.com",
+            "maxLength" : 254,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "email" ]
+      },
+      "ResendVerificationResponse" : {
+        "type" : "object",
+        "description" : "Siempre la misma respuesta, exista o no la cuenta",
+        "properties" : {
+          "resendAfterSeconds" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Segundos que hay que esperar para pedir otro código",
+            "example" : 60
+          }
+        },
+        "required" : [ "resendAfterSeconds" ]
+      },
+      "VerifyEmailRequest" : {
+        "type" : "object",
+        "description" : "Código recibido por correo para activar la cuenta",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de 6 cifras",
+            "example" : "482915",
+            "minLength" : 1,
+            "pattern" : "^[0-9]{6}$"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "Correo con el que se registró",
+            "example" : "ana@example.com",
+            "maxLength" : 254,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "code", "email" ]
+      }
+    }
+  }
+}

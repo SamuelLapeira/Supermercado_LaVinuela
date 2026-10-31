@@ -1,0 +1,7 @@
+{
+  "input": "../contracts/openapi.json",
+  "output": "projects/api/src/lib/generated",
+  "indexFile": true,
+  "removeStaleFiles": true,
+  "ignoreUnusedModels": false
+}

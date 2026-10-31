@@ -27,7 +27,7 @@ export default defineConfig(
   {
     // Código generado y la plantilla de ejemplo de Angular, que se sustituye en la historia E0-06.
     ignores: [
-      'dist/**', '.angular/**', 'node_modules/**', 'coverage/**',
+      'projects/api/src/lib/generated/**', 'dist/**', '.angular/**', 'node_modules/**', 'coverage/**',
       'projects/tienda/src/app/app.html', 'projects/panel/src/app/app.html',
     ],
   },

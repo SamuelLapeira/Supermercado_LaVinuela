@@ -62,6 +62,15 @@ management:
     java:
       enabled: true
 
+# Contrato OpenAPI (docs/api-contract.md). Solo se publica el documento JSON; no se incluye Swagger UI.
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  paths-to-match: /api/**
+  # Salida siempre igual (claves ordenadas): el contrato guardado en Git solo cambia cuando cambia la API de verdad.
+  writer-with-order-by-keys: true
+  writer-with-default-pretty-printer: true
+
 # Ajustes propios de la aplicación. Los secretos NO van aquí: llegan por variables de entorno.
 app:
   mail:

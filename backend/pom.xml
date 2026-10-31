@@ -31,6 +31,9 @@
   
     <!-- Bouncy Castle: implementación de Argon2id. Siempre 1.85 o posterior (CVE-2026-59650). -->
     <bouncycastle.version>1.85</bouncycastle.version>
+  
+    <!-- springdoc: genera el contrato OpenAPI. La serie 3.1 es la de Spring Boot 4.1. -->
+    <springdoc.version>3.1.0</springdoc.version>
   </properties>
 
   <dependencyManagement>
@@ -75,6 +78,13 @@
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
       <scope>runtime</scope>
+    </dependency>
+
+    <!-- Contrato de la API (docs/api-contract.md): genera el documento OpenAPI a partir del código. -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+      <version>${springdoc.version}</version>
     </dependency>
 
     <!-- Registro y cuentas (historia E1-01): correo por SMTP y Argon2id para las contraseñas. -->

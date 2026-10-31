@@ -18,3 +18,4 @@ Cada decisión importante se registra aquí con su motivo. Si cambia, se añade 
 | 012 | [Inmutabilidad por triggers y ajustes del esquema respecto a la Fase 5](012-esquema-inmutabilidad-y-ajustes.md) | Aceptada |
 | 013 | [Identificador de petición propio y puerto de gestión aparte](013-identificador-de-peticion-y-puerto-de-gestion.md) | Aceptada |
 | 014 | [Registro con usuario, contraseña y código de verificación por correo](014-registro-con-codigo-de-verificacion.md) | Aceptada |
+| 015 | [Contrato OpenAPI generado del código](015-contrato-openapi-generado-del-codigo.md) | Aceptada |
