@@ -1,0 +1,16 @@
+.lead {
+  color: var(--muted);
+}
+
+.code {
+  font-family: var(--font-display);
+  font-size: var(--fs-700);
+  letter-spacing: 0.35em;
+  text-align: center;
+}
+
+.resend {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  justify-items: start;
+}

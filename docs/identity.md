@@ -124,10 +124,11 @@ código nuevo.
    Invoke-RestMethod -Method Post -Uri http://localhost:8080/api/v1/auth/verify-email -ContentType "application/json" -Body $v
    ```
 
+Las pantallas de la tienda están descritas en `docs/account-screens.md` y el contrato de la API en `docs/api-contract.md`.
+
 ## Qué queda para las siguientes historias
 
 - **Iniciar y cerrar sesión** (E1-02): hasta que exista, una cuenta activa todavía no puede entrar.
 - **Recuperar la contraseña** (E1-03) y **perfil, direcciones y teléfono** (en el primer pedido, E4 y E1-04).
-- **Pantallas del registro en la tienda** (Angular) y el **contrato OpenAPI** que genera el cliente del frontend.
 - **Límite de peticiones por dirección IP** (E14-01): hoy los límites son por cuenta.
 - **Textos legales definitivos** (E14-03): la versión de los textos aceptados es provisional (`2026-10`).

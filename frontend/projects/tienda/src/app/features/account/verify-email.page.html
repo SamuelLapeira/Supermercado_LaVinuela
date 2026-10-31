@@ -1,0 +1,58 @@
+<lv-auth-layout>
+  @if (done()) {
+    <h1>¡Cuenta activada!</h1>
+    <lv-alert variant="ok">Tu correo está confirmado y tu cuenta ya está activa.</lv-alert>
+    <p>
+      Estamos terminando la entrada a tu cuenta: muy pronto podrás iniciar sesión con tu nombre de usuario y tu contraseña.
+    </p>
+  } @else {
+    <h1>Revisa tu correo</h1>
+    @if (emailKnown) {
+      <p class="lead">
+        Te hemos enviado un código de 6 cifras a <strong>{{ maskedEmail }}</strong>. Escríbelo aquí para activar tu cuenta.
+        Caduca en 15 minutos.
+      </p>
+    } @else {
+      <p class="lead">Escribe tu correo y el código de 6 cifras que te hemos enviado. Caduca en 15 minutos.</p>
+    }
+
+    @if (generalError()) {
+      <lv-alert variant="danger">{{ generalError() }}</lv-alert>
+    }
+    @if (notice()) {
+      <lv-alert variant="info">{{ notice() }}</lv-alert>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="verify()" class="lv-stack">
+      @if (!emailKnown) {
+        <lv-field label="Correo electrónico" [error]="emailError()" required>
+          <input lvControl formControlName="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" />
+        </lv-field>
+      }
+
+      <lv-field label="Código de verificación" hint="6 cifras" [error]="codeError()" required>
+        <input
+          lvControl
+          class="code"
+          formControlName="code"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          maxlength="6"
+          pattern="[0-9]*"
+        />
+      </lv-field>
+
+      <button lvButton lvSize="large" lvBlock type="submit" [disabled]="busy() || blocked()" [attr.aria-busy]="busy()">
+        {{ busy() ? 'Comprobando…' : 'Activar mi cuenta' }}
+      </button>
+    </form>
+
+    <div class="resend lv-stack">
+      <p class="lv-muted">¿No te ha llegado el correo?</p>
+      <button type="button" lvButton="ghost" (click)="resend()" [disabled]="cooldown() > 0 || busy()">
+        {{ resendLabel() }}
+      </button>
+      <a routerLink="/registro">Me he equivocado de correo</a>
+    </div>
+  }
+</lv-auth-layout>

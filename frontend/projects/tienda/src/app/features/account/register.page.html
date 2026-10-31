@@ -1,0 +1,68 @@
+<lv-auth-layout>
+  <h1>Crea tu cuenta</h1>
+  <p class="lead">
+    Solo necesitamos un nombre de usuario, tu correo y una contraseña. Te enviaremos un código para confirmar el correo.
+  </p>
+
+  @if (generalError()) {
+    <lv-alert variant="danger">{{ generalError() }}</lv-alert>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="lv-stack">
+    <lv-field
+      label="Nombre de usuario"
+      hint="De 3 a 30 caracteres: letras, números, punto, guion o guion bajo."
+      [error]="usernameError()"
+      required
+    >
+      <input lvControl formControlName="username" autocomplete="username" autocapitalize="none" spellcheck="false" />
+    </lv-field>
+
+    <lv-field label="Correo electrónico" hint="Aquí te enviaremos el código de verificación." [error]="emailError()" required>
+      <input lvControl formControlName="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" />
+    </lv-field>
+
+    <lv-field label="Contraseña" hint="Mínimo 10 caracteres, con una mayúscula, una minúscula y un número." [error]="passwordError()" required>
+      <div class="password-row">
+        <input
+          lvControl
+          formControlName="password"
+          [type]="showPassword() ? 'text' : 'password'"
+          autocomplete="new-password"
+        />
+        <button type="button" lvButton="ghost" (click)="toggleShowPassword()">
+          {{ showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña' }}
+        </button>
+      </div>
+    </lv-field>
+
+    <ul class="rules" aria-label="Condiciones de la contraseña">
+      @for (check of passwordChecks(); track check.id) {
+        <li [class.met]="check.met">
+          <span aria-hidden="true" class="mark">{{ check.met ? '✓' : '○' }}</span>
+          {{ check.label }}
+          <span class="lv-visually-hidden">{{ check.met ? ': cumplida' : ': pendiente' }}</span>
+        </li>
+      }
+    </ul>
+
+    <div class="terms">
+      <label class="check">
+        <input
+          type="checkbox"
+          formControlName="acceptTerms"
+          [attr.aria-invalid]="termsError() ? 'true' : null"
+          [attr.aria-describedby]="termsError() ? 'terms-error' : null"
+        />
+        <span>He leído y acepto las condiciones de uso y la política de privacidad.</span>
+      </label>
+      @if (termsError()) {
+        <p id="terms-error" class="lv-field__error" role="alert">{{ termsError() }}</p>
+      }
+    </div>
+
+    <button lvButton lvSize="large" lvBlock type="submit" [disabled]="busy()" [attr.aria-busy]="busy()">
+      {{ busy() ? 'Creando tu cuenta…' : 'Crear cuenta' }}
+    </button>
+  </form>
+</lv-auth-layout>

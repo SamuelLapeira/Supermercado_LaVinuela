@@ -97,7 +97,7 @@ lo toca, cumple accesibilidad si toca la interfaz y está documentada.
 
 | Historia | Contenido | Estado |
 | --- | --- | --- |
-| E1-01 | Registro con usuario, contraseña y código de verificación por correo ([docs/identity.md](docs/identity.md)) | Servidor hecho y contrato de la API ([docs/api-contract.md](docs/api-contract.md)); faltan las pantallas |
+| E1-01 | Registro con usuario, contraseña y código de verificación por correo ([docs/identity.md](docs/identity.md)) | Hecha: servidor, contrato de la API ([docs/api-contract.md](docs/api-contract.md)) y pantallas de la tienda ([docs/account-screens.md](docs/account-screens.md)) |
 | E1-02 | Iniciar y cerrar sesión | Siguiente |
 
 **Verificado:** `mvn verify` en el backend (incluidas las pruebas de MySQL real, salud y métricas).

@@ -69,17 +69,28 @@ for (const app of ['tienda', 'panel']) {
 }
 if (angularChanged) write('angular.json', JSON.stringify(angular, null, 2) + '\n');
 
-// 5) HttpClient en las dos aplicaciones
+// 5) HttpClient y dirección base de la API en las dos aplicaciones.
+//    El contrato declara el servidor como "/" y el generador lo toma como dirección base por defecto; como cada ruta ya
+//    empieza por "/", las llamadas saldrían como "//api/..." (el navegador lo entiende como otra web). Por eso se fija
+//    la dirección base vacía: las llamadas van a la misma dirección que la página.
 for (const app of ['tienda', 'panel']) {
   const file = `projects/${app}/src/app/app.config.ts`;
   if (!existsSync(resolve(frontend, file))) { console.warn(`AVISO: falta ${file}`); continue; }
   let config = read(file);
-  if (config.includes('provideHttpClient')) continue;
-  if (!/providers:\s*\[/.test(config)) { console.warn(`AVISO: no he podido añadir HttpClient en ${file}`); continue; }
-  config = "import { provideHttpClient, withFetch } from '@angular/common/http';\n" + config;
-  config = config.replace(/providers:\s*\[/, (match) => `${match}\n    provideHttpClient(withFetch()),`);
-  write(file, config);
-  console.log(`${file}: HttpClient activado`);
+  const before = config;
+  if (!/providers:\s*\[/.test(config)) { console.warn(`AVISO: no he podido modificar ${file}`); continue; }
+  if (!config.includes('provideHttpClient')) {
+    config = "import { provideHttpClient, withFetch } from '@angular/common/http';\n" + config;
+    config = config.replace(/providers:\s*\[/, (match) => `${match}\n    provideHttpClient(withFetch()),`);
+  }
+  if (!config.includes('provideApiConfiguration')) {
+    config = "import { provideApiConfiguration } from 'api';\n" + config;
+    config = config.replace(/providers:\s*\[/, (match) => `${match}\n    provideApiConfiguration(''),`);
+  }
+  if (config !== before) {
+    write(file, config);
+    console.log(`${file}: HttpClient y dirección base de la API configurados`);
+  }
 }
 
 console.log('\nListo. Siguiente paso:  cd frontend; npm run api:generate');

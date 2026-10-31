@@ -56,6 +56,14 @@ El servidor de desarrollo de Angular reenvía todo lo que empieza por `/api` al 
 con `proxy.conf.json`. Así las pantallas llaman a una dirección relativa, sin CORS. En producción, un proxy inverso hará
 lo mismo: la tienda y la API vivirán bajo el mismo dominio.
 
+## Dirección base del cliente
+
+El contrato declara el servidor como `/` (relativo, para que el documento no cambie en cada ejecución) y el generador
+toma ese valor como dirección base por defecto. Como las rutas ya empiezan por `/`, las llamadas saldrían como
+`//api/v1/...`, que el navegador interpreta como otra web. Por eso `app.config.ts` de cada aplicación fija
+`provideApiConfiguration('')`: las llamadas van a la misma dirección que la página. Una prueba (`app.config.spec.ts`)
+vigila que no se pierda. Lo configura `tools/setup-api-client.mjs`.
+
 ## Cómo se usa el cliente desde Angular
 
 Las llamadas pasan por el servicio `Api` que genera ng-openapi-gen; cada operación del contrato es una función con sus
