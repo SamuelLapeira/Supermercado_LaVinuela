@@ -58,7 +58,7 @@ class ObservabilityTests {
 
     @Test
     void unknownRoutesAnswerWithAStandardErrorThatCarriesTheTraceIdentifier() throws Exception {
-        HttpResponse<String> response = get("/api/v1/no-existe", "peticion-de-prueba-2");
+        HttpResponse<String> response = get("/api/v1/auth/no-existe", "peticion-de-prueba-2");
 
         assertThat(response.statusCode()).isEqualTo(404);
         assertThat(response.headers().firstValue("Content-Type").orElse("")).contains("application/problem+json");

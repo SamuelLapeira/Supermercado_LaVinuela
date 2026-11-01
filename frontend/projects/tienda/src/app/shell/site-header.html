@@ -1,0 +1,37 @@
+<div class="demo">
+  Versión de demostración: productos, precios y fotos de ejemplo. Todavía no se pueden hacer pedidos de verdad.
+</div>
+
+<header class="header">
+  <div class="lv-container top">
+    <a routerLink="/" class="brand" aria-label="La Viñuela, ir al inicio">
+      <lv-logo />
+    </a>
+
+    <form class="search" role="search" (submit)="$event.preventDefault(); search()">
+      <label class="lv-visually-hidden" for="buscador">Buscar productos</label>
+      <input id="buscador" class="field" type="search" [formControl]="query" placeholder="Buscar productos" autocomplete="off" />
+      <button class="go" lvButton type="submit">Buscar</button>
+    </form>
+
+    <nav class="actions" aria-label="Tu cuenta y tu cesta">
+      @if (session.user(); as user) {
+        <a routerLink="/cuenta" class="who">Hola, {{ user.username }}</a>
+        <button lvButton="ghost" type="button" (click)="logout()" [disabled]="leaving()">Salir</button>
+      } @else if (session.status() !== 'unknown') {
+        <a lvButton="ghost" routerLink="/entrar" class="login" aria-label="Entrar en tu cuenta"><span aria-hidden="true">👤</span><span class="login-text">Entrar</span></a>
+      }
+      <button class="cart" lvButton="accent" type="button" (click)="cart.openDrawer()" [attr.aria-label]="'Cesta: ' + cart.count() + ' productos'">
+        <span aria-hidden="true">🛒</span>
+        <span class="count" aria-hidden="true">{{ cart.count() }}</span>
+      </button>
+    </nav>
+  </div>
+
+  <nav class="cats lv-container" aria-label="Categorías">
+    <a routerLink="/ofertas" routerLinkActive="active" class="offers">Ofertas</a>
+    @for (category of categories; track category.slug) {
+      <a [routerLink]="['/categoria', category.slug]" routerLinkActive="active">{{ category.name }}</a>
+    }
+  </nav>
+</header>

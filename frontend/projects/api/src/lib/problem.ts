@@ -12,6 +12,13 @@ export const PROBLEM_CODES = {
   verificationCodeExpired: 'VERIFICATION_CODE_EXPIRED',
   verificationTooManyAttempts: 'VERIFICATION_TOO_MANY_ATTEMPTS',
   emailServiceUnavailable: 'EMAIL_SERVICE_UNAVAILABLE',
+  invalidCredentials: 'AUTH_INVALID_CREDENTIALS',
+  emailNotVerified: 'AUTH_EMAIL_NOT_VERIFIED',
+  accountLocked: 'AUTH_ACCOUNT_LOCKED',
+  authRequired: 'AUTH_REQUIRED',
+  tokenExpired: 'AUTH_TOKEN_EXPIRED',
+  tokenReused: 'AUTH_TOKEN_REUSED',
+  accessDenied: 'ACCESS_DENIED',
 } as const;
 
 /**

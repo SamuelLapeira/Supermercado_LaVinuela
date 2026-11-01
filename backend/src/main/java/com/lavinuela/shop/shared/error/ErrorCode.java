@@ -21,6 +21,12 @@ public enum ErrorCode {
     AUTH_TOKEN_EXPIRED(401, "Tu sesión ha caducado. Vuelve a iniciar sesión."),
     /** Por seguridad, hemos cerrado tu sesión. Vuelve a iniciar sesión. */
     AUTH_TOKEN_REUSED(401, "Por seguridad, hemos cerrado tu sesión. Vuelve a iniciar sesión."),
+    /** Hay que iniciar sesión para hacer esto. */
+    AUTH_REQUIRED(401, "Tienes que iniciar sesión para continuar."),
+
+    /** Contraseña correcta pero el correo todavía no está confirmado. */
+    AUTH_EMAIL_NOT_VERIFIED(403, "Tienes que confirmar tu correo antes de entrar. Escribe el código que te enviamos."),
+
     /** No tienes permiso para hacer esto. */
     ACCESS_DENIED(403, "No tienes permiso para hacer esto."),
     /** No hemos encontrado lo que buscas. */

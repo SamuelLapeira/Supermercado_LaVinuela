@@ -273,6 +273,49 @@
     font-size: var(--fs-300);
   }
 
+  // ------------------------------------------------------------------ barra de progreso (lv-progress)
+  .lv-progress {
+    display: block;
+    height: 0.6rem;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+  }
+  .lv-progress__fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--brand);
+    transition: width var(--dur-m) var(--ease);
+  }
+
+  // ------------------------------------------------------------------ chip de filtro (botón que se activa y desactiva)
+  .lv-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.25rem;
+    padding: 0 var(--space-3);
+    border: 1.5px solid var(--control-border);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--ink);
+    font: 600 var(--fs-300) / 1 var(--font-body);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .lv-chip:hover {
+    background: var(--surface-2);
+  }
+  .lv-chip[aria-pressed="true"],
+  .lv-chip[aria-current="true"],
+  .lv-chip.is-active {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: var(--on-brand);
+  }
+
   // ------------------------------------------------------------------ marcador de foto por categoría
   .lv-tile {
     display: flex;

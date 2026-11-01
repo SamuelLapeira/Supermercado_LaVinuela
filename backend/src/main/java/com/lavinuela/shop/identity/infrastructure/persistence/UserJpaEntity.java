@@ -50,6 +50,9 @@ public class UserJpaEntity {
     @Column(name = "marketing_consent", nullable = false)
     private boolean marketingConsent;
 
+    @Column(name = "last_login_at")
+    private @Nullable Instant lastLoginAt;
+
     @Version
     private int version;
 
@@ -115,6 +118,14 @@ public class UserJpaEntity {
 
     public void setMarketingConsent(boolean marketingConsent) {
         this.marketingConsent = marketingConsent;
+    }
+
+    public @Nullable Instant getLastLoginAt() {
+        return lastLoginAt;
+    }
+
+    public void setLastLoginAt(@Nullable Instant lastLoginAt) {
+        this.lastLoginAt = lastLoginAt;
     }
 
     public int getVersion() {

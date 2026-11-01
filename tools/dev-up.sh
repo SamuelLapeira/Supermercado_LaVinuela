@@ -22,6 +22,11 @@ if ! grep -q '^APP_CODE_PEPPER=' .env; then
   echo "APP_CODE_PEPPER=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 48)" >> .env
 fi
 
+# Clave con la que se firman los tokens de acceso (APP_JWT_SECRET). Si .env ya existía de antes, se añade ahora.
+if ! grep -q '^APP_JWT_SECRET=' .env; then
+  echo "APP_JWT_SECRET=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 64)" >> .env
+fi
+
 echo ">> Arrancando contenedores..."
 docker compose up -d --wait
 

@@ -1,0 +1,13 @@
+<lv-auth-layout>
+  @if (session.user(); as user) {
+    <h1>Hola, {{ user.username }}</h1>
+    <lv-alert variant="ok">Has iniciado sesión como {{ user.email }}.</lv-alert>
+    <p>
+      Aquí tendrás tus pedidos, tus direcciones y tus datos. Estamos preparando la tienda: muy pronto podrás hacer tu primera
+      compra.
+    </p>
+    <button lvButton="ghost" type="button" (click)="logout()" [disabled]="leaving()">
+      {{ leaving() ? 'Saliendo…' : 'Cerrar sesión' }}
+    </button>
+  }
+</lv-auth-layout>

@@ -9,6 +9,8 @@ app:
   identity:
     # Clave fija solo para las pruebas (en la aplicación real llega por variable de entorno).
     code-pepper: clave-secreta-solo-para-pruebas-0123456789abcdef
+    jwt-secret: firma-de-tokens-solo-para-pruebas-0123456789abcdef-xyz
+    refresh-cookie-secure: false
 
 logging:
   level:

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class HmacCodeHasherTests {
 
-    private final HmacCodeHasher hasher = new HmacCodeHasher(new IdentityProperties("a".repeat(40)));
+    private final HmacCodeHasher hasher = new HmacCodeHasher(new IdentityProperties("a".repeat(40), "j".repeat(40), true));
 
     @Test
     void producesA64CharacterHexadecimalFingerprint() {
@@ -30,7 +30,7 @@ class HmacCodeHasherTests {
 
     @Test
     void dependsOnTheSecretKey() {
-        HmacCodeHasher other = new HmacCodeHasher(new IdentityProperties("b".repeat(40)));
+        HmacCodeHasher other = new HmacCodeHasher(new IdentityProperties("b".repeat(40), "j".repeat(40), true));
         assertThat(other.hash(7, "123456")).isNotEqualTo(hasher.hash(7, "123456"));
     }
 
@@ -56,7 +56,7 @@ class HmacCodeHasherTests {
     }
 
     @Test
-    void theSecretKeyNeverAppearsInLogs() {
-        assertThat(new IdentityProperties("a".repeat(40)).toString()).doesNotContain("aaaa");
+    void theSecretKeysNeverAppearInLogs() {
+        assertThat(new IdentityProperties("a".repeat(40), "j".repeat(40), true).toString()).doesNotContain("aaaa").doesNotContain("jjjj");
     }
 }

@@ -80,6 +80,16 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- Seguridad (historia E1-02): Spring Security y tokens de acceso JWT (recurso protegido por token Bearer). -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security-oauth2-resource-server</artifactId>
+    </dependency>
+
     <!-- Contrato de la API (docs/api-contract.md): genera el documento OpenAPI a partir del código. -->
     <dependency>
       <groupId>org.springdoc</groupId>

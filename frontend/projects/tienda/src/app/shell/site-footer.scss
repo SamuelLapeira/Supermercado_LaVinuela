@@ -1,0 +1,50 @@
+.footer {
+  margin-top: var(--space-9);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-7);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+h2 {
+  margin-bottom: var(--space-3);
+  font: 800 var(--fs-400) / 1.2 var(--font-display);
+}
+
+address {
+  font-style: normal;
+}
+
+p {
+  margin-bottom: var(--space-2);
+}
+
+ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about p {
+  margin-top: var(--space-3);
+  color: var(--muted);
+}
+
+.small {
+  color: var(--muted);
+  font-size: var(--fs-300);
+}
+
+.legal {
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--fs-300);
+}

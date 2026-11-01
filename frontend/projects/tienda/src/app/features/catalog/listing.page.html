@@ -1,0 +1,130 @@
+<div class="lv-container page">
+  <nav class="crumbs" aria-label="Migas de pan">
+    <a routerLink="/">Inicio</a>
+    <span aria-hidden="true">›</span>
+    @if (category(); as current) {
+      <span aria-current="page">{{ current.name }}</span>
+    } @else {
+      <span aria-current="page">{{ heading() }}</span>
+    }
+  </nav>
+
+  @if (mode === 'category' && !category()) {
+    <section class="empty">
+      <p class="big" aria-hidden="true">🔍</p>
+      <h1>No encontramos esa categoría</h1>
+      <p>Puede que se haya movido. Prueba con el buscador o mira todas las ofertas.</p>
+      <a lvButton routerLink="/ofertas">Ver las ofertas</a>
+    </section>
+  } @else {
+    <header class="head">
+      <div>
+        <h1>{{ heading() }}</h1>
+        <p class="count" aria-live="polite">{{ visible().length }} {{ visible().length === 1 ? 'producto' : 'productos' }}</p>
+      </div>
+      <button class="filters-toggle" lvButton="ghost" type="button" (click)="toggleFilters()" [attr.aria-expanded]="showFilters()" aria-controls="filtros">
+        Filtros@if (activeFilterCount() > 0) {
+          ({{ activeFilterCount() }})
+        }
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside id="filtros" class="filters" [class.open]="showFilters()" aria-label="Filtros">
+        @if (mode === 'category') {
+          <section class="group" aria-labelledby="f-sub">
+            <h2 id="f-sub">Subcategorías</h2>
+            <ul role="list">
+              <li>
+                <button type="button" class="opt-link" [attr.aria-current]="filters().subcategory === null ? 'true' : null" (click)="setSubcategory(null)">Todas</button>
+              </li>
+              @for (sub of subcategoryOptions(); track sub.slug) {
+                <li>
+                  <button type="button" class="opt-link" [attr.aria-current]="filters().subcategory === sub.slug ? 'true' : null" (click)="setSubcategory(sub.slug)">
+                    {{ sub.name }} <span class="n">({{ sub.count }})</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          </section>
+        } @else {
+          <section class="group" aria-labelledby="f-cat">
+            <h2 id="f-cat">Ver por categoría</h2>
+            <ul role="list">
+              @for (entry of categories; track entry.slug) {
+                <li><a class="opt-link" [routerLink]="['/categoria', entry.slug]">{{ entry.emoji }} {{ entry.name }}</a></li>
+              }
+            </ul>
+          </section>
+        }
+
+        @if (tagOptions().length > 0) {
+          <fieldset class="group">
+            <legend>Etiquetas</legend>
+            @for (option of tagOptions(); track option.tag) {
+              <label class="opt">
+                <input type="checkbox" [checked]="isTagSelected(option.tag)" (change)="toggleTag(option.tag)" />
+                <span>{{ tagLabels[option.tag] }} <span class="n">({{ option.count }})</span></span>
+              </label>
+            }
+          </fieldset>
+        }
+
+        @if (brandOptions().length > 0) {
+          <fieldset class="group">
+            <legend>Marcas</legend>
+            <div class="brands">
+              @for (brand of brandOptions(); track brand.value) {
+                <label class="opt">
+                  <input type="checkbox" [checked]="isBrandSelected(brand.value)" (change)="toggleBrand(brand.value)" />
+                  <span>{{ brand.value }} <span class="n">({{ brand.count }})</span></span>
+                </label>
+              }
+            </div>
+          </fieldset>
+        }
+
+        @if (activeFilterCount() > 0) {
+          <button type="button" lvButton="ghost" (click)="clearFilters()">Quitar los filtros</button>
+        }
+      </aside>
+
+      <section class="results" aria-label="Productos">
+        <div class="toolbar">
+          <label for="orden">Ordenar por</label>
+          <select id="orden" class="select" (change)="onSort($event)">
+            @for (key of sortKeys; track key) {
+              <option [value]="key" [selected]="filters().sort === key">{{ sortLabels[key] }}</option>
+            }
+          </select>
+        </div>
+
+        @if (visible().length === 0) {
+          <div class="empty">
+            <p class="big" aria-hidden="true">🛒</p>
+            <h2>No hay productos con esos criterios</h2>
+            @if (mode === 'search') {
+              <p>Prueba con otra palabra (por ejemplo «aceite», «leche» o «jamón») o recorre las categorías.</p>
+            } @else {
+              <p>Quita algún filtro para ver más productos.</p>
+            }
+            @if (activeFilterCount() > 0) {
+              <button type="button" lvButton (click)="clearFilters()">Quitar los filtros</button>
+            }
+          </div>
+        } @else {
+          <ul class="grid" role="list">
+            @for (product of shown(); track product.slug) {
+              <li><lv-product-card [product]="product" /></li>
+            }
+          </ul>
+          @if (hasMore()) {
+            <div class="more">
+              <button type="button" lvButton="ghost" lvSize="large" (click)="showMore()">Mostrar más productos</button>
+            </div>
+          }
+        }
+      </section>
+    </div>
+  }
+</div>

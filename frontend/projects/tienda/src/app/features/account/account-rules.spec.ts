@@ -3,9 +3,11 @@ import {
   isEmailValid,
   isPasswordValid,
   isUsernameValid,
+  maskEmail,
   normalizeEmail,
   normalizeUsername,
   passwordChecks,
+  safeReturnUrl,
 } from './account-rules';
 
 describe('username', () => {
@@ -84,5 +86,33 @@ describe('verification code', () => {
     for (const bad of ['', '12345', '1234567', '12ab56', ' 482915']) {
       expect(isCodeValid(bad)).toBe(false);
     }
+  });
+});
+
+describe('safeReturnUrl', () => {
+  it('keeps addresses of this same site', () => {
+    expect(safeReturnUrl('/cuenta')).toBe('/cuenta');
+    expect(safeReturnUrl('/catalogo?categoria=lacteos')).toBe('/catalogo?categoria=lacteos');
+  });
+
+  it('ignores anything that could lead to another site', () => {
+    for (const bad of ['//evil.example.com', 'https://evil.example.com', 'http://evil.example.com', '/\\evil.example.com', 'javascript:alert(1)', 'cuenta', '', null, undefined, '/ok\nmalo']) {
+      expect(safeReturnUrl(bad)).toBe('/cuenta');
+    }
+  });
+
+  it('uses the fallback it is given', () => {
+    expect(safeReturnUrl('//evil.example.com', '/')).toBe('/');
+  });
+});
+
+describe('maskEmail', () => {
+  it('hides the local part like the server does', () => {
+    expect(maskEmail('ana.lopez@example.com')).toBe('a***@example.com');
+  });
+
+  it('hides everything when it is not an address', () => {
+    expect(maskEmail('sin-arroba')).toBe('***');
+    expect(maskEmail('@example.com')).toBe('***');
   });
 });

@@ -98,7 +98,8 @@ lo toca, cumple accesibilidad si toca la interfaz y está documentada.
 | Historia | Contenido | Estado |
 | --- | --- | --- |
 | E1-01 | Registro con usuario, contraseña y código de verificación por correo ([docs/identity.md](docs/identity.md)) | Hecha: servidor, contrato de la API ([docs/api-contract.md](docs/api-contract.md)) y pantallas de la tienda ([docs/account-screens.md](docs/account-screens.md)) |
-| E1-02 | Iniciar y cerrar sesión | Siguiente |
+| E1-02 | Iniciar y cerrar sesión con el correo ([docs/identity.md](docs/identity.md)) | Hecha: servidor y pantallas de la tienda ([docs/frontend-session.md](docs/frontend-session.md)) |
+| Diseño | Maqueta navegable de la tienda con datos de ejemplo ([docs/shop-design.md](docs/shop-design.md)) | En curso: hecho portada, catálogo, ficha y cesta; falta pedido, pedidos y perfil |
 
 **Verificado:** `mvn verify` en el backend (incluidas las pruebas de MySQL real, salud y métricas).
 El frontend compila (`tienda` y `panel`) en modo estricto con Angular 22.

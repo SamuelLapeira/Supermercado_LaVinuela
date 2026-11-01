@@ -60,3 +60,28 @@ export function passwordChecks(password: string): readonly PasswordCheck[] {
 export function isPasswordValid(password: string): boolean {
   return passwordChecks(password).every((check) => check.met);
 }
+
+/**
+ * La dirección a la que volver tras iniciar sesión, **solo si es de esta misma web**. Una dirección que empiece por «//»
+ * o por «http» llevaría a otra web (el clásico «redirección abierta» con el que se engaña a la gente para que escriba su
+ * contraseña en un sitio falso), así que se ignora.
+ */
+export function safeReturnUrl(candidate: string | null | undefined, fallback = '/cuenta'): string {
+  if (!candidate || !candidate.startsWith('/') || candidate.startsWith('//') || candidate.includes('\\') || hasControlCharacters(candidate)) {
+    return fallback;
+  }
+  return candidate;
+}
+
+/** El correo con la parte local oculta (a***@example.com), igual que lo hace el servidor. */
+export function maskEmail(email: string): string {
+  const at = email.indexOf('@');
+  if (at <= 0) {
+    return '***';
+  }
+  return `${email.charAt(0)}***${email.substring(at)}`;
+}
+
+function hasControlCharacters(text: string): boolean {
+  return [...text].some((character) => character.charCodeAt(0) < 32);
+}

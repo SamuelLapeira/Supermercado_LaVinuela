@@ -1,4 +1,4 @@
-# Pantallas de registro y verificación (tienda)
+# Pantallas de cuenta de la tienda: registro, verificación, entrar y mi cuenta
 
 Dos pantallas de la tienda (Angular) que usan el servidor de cuentas (`docs/identity.md`) a través del cliente generado
 del contrato (`docs/api-contract.md`).
@@ -9,8 +9,10 @@ del contrato (`docs/api-contract.md`).
 /registro  ──►  la persona escribe usuario, correo y contraseña, y acepta las condiciones
    │            (el servidor crea la cuenta pendiente y envía un código al correo)
    ▼
-/verificar ──►  escribe el código de 6 cifras  ──►  «¡Cuenta activada!»
+/verificar ──►  escribe el código de 6 cifras  ──►  «¡Cuenta activada!»  ──►  /entrar
                 ¿no llega? «Reenviar código» (con cuenta atrás de 60 s)
+
+/entrar    ──►  correo + contraseña  ──►  /cuenta (o la pantalla que se había pedido)
 ```
 
 ## Pantalla de registro (`/registro`)
@@ -37,6 +39,25 @@ del contrato (`docs/api-contract.md`).
   («si hay una cuenta pendiente con ese correo…»), igual que la respuesta del servidor, para no revelar qué correos
   tienen cuenta.
 - Al acertar, «¡Cuenta activada!». Hasta que exista el inicio de sesión, el mensaje lo explica con honestidad.
+
+## Pantalla de inicio de sesión (`/entrar`)
+
+- Se entra **con el correo** y la contraseña. Al entrar no se exige que la contraseña sea «fuerte»: solo que no esté vacía
+  (las reglas de contraseña se aplican al crearla).
+- Los errores usan el mensaje del servidor, que es el mismo si el correo no existe o la contraseña es incorrecta. Tras varios
+  fallos, el mensaje explica el bloqueo temporal.
+- **Cuenta sin confirmar:** si la contraseña es correcta pero falta confirmar el correo, la pantalla pide un código nuevo y lleva
+  directamente a escribirlo, en vez de mostrar un error.
+- **Volver a donde se estaba:** si se llegó porque una pantalla protegida lo exigía, tras entrar se vuelve a ella. Solo se
+  admiten direcciones de esta misma web: una dirección que empiece por `//` o `http` se ignora (así nadie puede engañar para
+  que se escriba la contraseña y se acabe en una web falsa).
+
+## Mi cuenta (`/cuenta`) y la cabecera
+
+- `/cuenta` está **protegida**: sin sesión, lleva a `/entrar` y, al entrar, vuelve. De momento solo confirma quién ha entrado y
+  permite salir; aquí irán los pedidos, las direcciones y los datos.
+- La **cabecera** de la tienda muestra el logotipo y, a la derecha, «Entrar» y «Crear cuenta» o «Hola, usuario» y «Salir».
+  Mientras se averigua si hay sesión no muestra nada (así no parpadean los botones).
 
 ## Accesibilidad
 

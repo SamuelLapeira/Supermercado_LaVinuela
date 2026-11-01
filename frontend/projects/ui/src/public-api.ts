@@ -9,4 +9,5 @@ export * from './lib/lv-button.directive';
 export * from './lib/lv-control.directive';
 export * from './lib/lv-field.component';
 export * from './lib/lv-logo.component';
+export * from './lib/lv-progress.component';
 export * from './lib/lv-quantity-stepper.component';

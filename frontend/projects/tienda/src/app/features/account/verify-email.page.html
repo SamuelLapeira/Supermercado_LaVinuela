@@ -2,9 +2,7 @@
   @if (done()) {
     <h1>¡Cuenta activada!</h1>
     <lv-alert variant="ok">Tu correo está confirmado y tu cuenta ya está activa.</lv-alert>
-    <p>
-      Estamos terminando la entrada a tu cuenta: muy pronto podrás iniciar sesión con tu nombre de usuario y tu contraseña.
-    </p>
+    <a lvButton lvSize="large" lvBlock routerLink="/entrar">Entrar en mi cuenta</a>
   } @else {
     <h1>Revisa tu correo</h1>
     @if (emailKnown) {

@@ -27,6 +27,7 @@ springdoc:
 app:
   identity:
     code-pepper: ${APP_CODE_PEPPER}
+    jwt-secret: ${APP_JWT_SECRET}
   mail:
     from: ${APP_MAIL_FROM}
 

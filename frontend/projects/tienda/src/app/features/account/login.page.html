@@ -1,0 +1,34 @@
+<lv-auth-layout>
+  <h1>Entra en tu cuenta</h1>
+  <p class="lead">Usa el correo con el que te registraste.</p>
+
+  @if (generalError()) {
+    <lv-alert variant="danger">{{ generalError() }}</lv-alert>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="lv-stack">
+    <lv-field label="Correo electrónico" [error]="emailError()" required>
+      <input lvControl formControlName="email" type="email" inputmode="email" autocomplete="username" spellcheck="false" />
+    </lv-field>
+
+    <lv-field label="Contraseña" [error]="passwordError()" required>
+      <div class="password-row">
+        <input
+          lvControl
+          formControlName="password"
+          [type]="showPassword() ? 'text' : 'password'"
+          autocomplete="current-password"
+        />
+        <button type="button" lvButton="ghost" (click)="toggleShowPassword()">
+          {{ showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña' }}
+        </button>
+      </div>
+    </lv-field>
+
+    <button lvButton lvSize="large" lvBlock type="submit" [disabled]="busy()" [attr.aria-busy]="busy()">
+      {{ busy() ? 'Entrando…' : 'Entrar' }}
+    </button>
+  </form>
+
+  <p class="switch">¿Todavía no tienes cuenta? <a routerLink="/registro">Créala aquí</a></p>
+</lv-auth-layout>

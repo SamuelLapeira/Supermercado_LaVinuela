@@ -91,6 +91,7 @@ public class RegisterCustomerService {
         }
         User user = User.register(PublicId.generate(clock, RANDOM), username, email, passwordHasher.hash(password));
         User saved = users.save(user);
+        users.assignRole(saved.requireId(), "CUSTOMER");
         users.recordConsent(saved.requireId(), "TERMS", LegalDocuments.CURRENT_VERSION);
         users.recordConsent(saved.requireId(), "PRIVACY", LegalDocuments.CURRENT_VERSION);
         codes.issue(saved);

@@ -44,6 +44,12 @@ if (-not (Select-String -Path $envPath -Pattern '^APP_CODE_PEPPER=' -Quiet)) {
     [System.IO.File]::AppendAllText($envPath, $pepper, (New-Object System.Text.UTF8Encoding($false)))
 }
 
+# Clave con la que se firman los tokens de acceso (APP_JWT_SECRET). Si .env ya existía de antes, se añade ahora.
+if (-not (Select-String -Path $envPath -Pattern '^APP_JWT_SECRET=' -Quiet)) {
+    $jwtSecret = "`nAPP_JWT_SECRET=" + (New-RandomPassword 64) + "`n"
+    [System.IO.File]::AppendAllText($envPath, $jwtSecret, (New-Object System.Text.UTF8Encoding($false)))
+}
+
 Write-Host '>> Arrancando contenedores...'
 docker compose up -d --wait
 if ($LASTEXITCODE -ne 0) { throw 'Docker Compose ha fallado. Revisa que Docker Desktop esté abierto.' }

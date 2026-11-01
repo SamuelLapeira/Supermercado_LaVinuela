@@ -1,0 +1,44 @@
+<!-- Quien usa el teclado cierra el panel con Escape (lo hace el propio navegador); el clic en el fondo es solo un atajo para el ratón. -->
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+<dialog #dialog class="drawer" aria-labelledby="cart-drawer-title" (close)="cart.closeDrawer()" (click)="onDialogClick($event)">
+  <div class="panel">
+    <header class="head">
+      <h2 id="cart-drawer-title">Tu cesta</h2>
+      <button class="x" lvButton="ghost" type="button" (click)="cart.closeDrawer()" aria-label="Cerrar la cesta">✕</button>
+    </header>
+
+    @if (cart.items().length === 0) {
+      <div class="empty">
+        <p class="big" aria-hidden="true">🧺</p>
+        <p>Tu cesta está vacía.</p>
+        <a lvButton routerLink="/ofertas" (click)="cart.closeDrawer()">Ver las ofertas</a>
+      </div>
+    } @else {
+      <ul class="lines" role="list">
+        @for (item of cart.items(); track item.product.slug) {
+          <li class="line">
+            <span class="thumb" aria-hidden="true">{{ item.product.emoji }}</span>
+            <div class="info">
+              <a class="name" [routerLink]="['/producto', item.product.slug]" (click)="cart.closeDrawer()">{{ item.product.name }}</a>
+              <span class="meta">{{ item.product.format }} · {{ money(item.product.price) }}</span>
+              <lv-quantity-stepper [itemName]="item.product.name" [max]="item.product.stock" [value]="item.quantity" (valueChange)="cart.setQuantity(item.product.slug, $event)" />
+            </div>
+            <span class="total">{{ money(item.total) }}</span>
+          </li>
+        }
+      </ul>
+
+      <footer class="foot">
+        <p class="subtotal"><span>Subtotal</span> <strong>{{ subtotalText() }}</strong></p>
+        @if (missing() > 0) {
+          <p class="free">Te faltan <strong>{{ missingText() }}</strong> para el envío gratis.</p>
+        } @else {
+          <p class="free ok">¡Tienes el envío gratis!</p>
+        }
+        <lv-progress [value]="cart.subtotal()" [max]="freeFrom" label="Progreso hacia el envío gratis" />
+        <a lvButton="ghost" lvBlock routerLink="/cesta" (click)="cart.closeDrawer()">Ver la cesta</a>
+        <a lvButton lvBlock lvSize="large" routerLink="/pedido" (click)="cart.closeDrawer()">Tramitar pedido</a>
+      </footer>
+    }
+  </div>
+</dialog>

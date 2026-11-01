@@ -4,6 +4,7 @@ import com.lavinuela.shop.identity.domain.model.User;
 import com.lavinuela.shop.identity.domain.port.UserRepository;
 import com.lavinuela.shop.shared.domain.PublicId;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.stereotype.Repository;
 
 /** Adaptador: guarda y lee las cuentas con JPA. Convierte entre la clase de dominio {@link User} y la entidad. */
@@ -20,7 +21,22 @@ class JpaUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return users.findByEmail(email).map(JpaUserRepository::toDomain);
+        return users.findByEmail(email).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByPublicId(String publicId) {
+        return users.findByPublicId(publicId).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findById(long id) {
+        return users.findById(id).map(this::toDomain);
+    }
+
+    @Override
+    public void assignRole(long userId, String roleCode) {
+        users.assignRole(userId, roleCode);
     }
 
     @Override
@@ -40,6 +56,7 @@ class JpaUserRepository implements UserRepository {
         entity.setStatus(user.status());
         entity.setEmailVerifiedAt(user.emailVerifiedAt());
         entity.setMarketingConsent(user.marketingConsent());
+        entity.setLastLoginAt(user.lastLoginAt());
         return toDomain(users.saveAndFlush(entity));
     }
 
@@ -48,10 +65,12 @@ class JpaUserRepository implements UserRepository {
         consents.save(UserConsentJpaEntity.granted(userId, consentType, documentVersion));
     }
 
-    private static User toDomain(UserJpaEntity entity) {
+    private User toDomain(UserJpaEntity entity) {
         String username = entity.getUsername();
+        Long id = entity.getId();
+        Set<String> roles = id == null ? Set.of() : Set.copyOf(users.findRoleCodes(id));
         return new User(
-                entity.getId(),
+                id,
                 PublicId.parse(entity.getPublicId()),
                 username == null ? "" : username,
                 entity.getEmail(),
@@ -59,6 +78,8 @@ class JpaUserRepository implements UserRepository {
                 entity.getStatus(),
                 entity.getEmailVerifiedAt(),
                 entity.isMarketingConsent(),
-                entity.getVersion());
+                entity.getVersion(),
+                entity.getLastLoginAt(),
+                roles);
     }
 }

@@ -9,6 +9,14 @@ public interface UserRepository {
     /** @param email ya normalizado (minúsculas) */
     Optional<User> findByEmail(String email);
 
+    /** Busca por el identificador público (el que lleva el token de acceso). */
+    Optional<User> findByPublicId(String publicId);
+
+    Optional<User> findById(long id);
+
+    /** Da un rol a la cuenta (por ejemplo {@code CUSTOMER}). */
+    void assignRole(long userId, String roleCode);
+
     /** @param username ya normalizado (minúsculas) */
     boolean existsByUsername(String username);
 

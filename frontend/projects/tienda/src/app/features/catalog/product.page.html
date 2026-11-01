@@ -1,0 +1,130 @@
+<div class="lv-container page">
+  @if (product(); as item) {
+    <nav class="crumbs" aria-label="Migas de pan">
+      <a routerLink="/">Inicio</a>
+      <span aria-hidden="true">›</span>
+      @if (category(); as current) {
+        <a [routerLink]="['/categoria', current.slug]">{{ current.name }}</a>
+        <span aria-hidden="true">›</span>
+      }
+      <span aria-current="page">{{ item.name }}</span>
+    </nav>
+
+    <div class="main">
+      <div class="media">
+        <div class="tile" [class]="'tile lv-tile--' + tone()">
+          <span class="emoji" aria-hidden="true">{{ item.emoji }}</span>
+        </div>
+        <p class="note">Imagen de ejemplo</p>
+      </div>
+
+      <section class="info" aria-labelledby="titulo">
+        <p class="brand">{{ item.brand }}</p>
+        <h1 id="titulo">{{ item.name }}</h1>
+        <p class="format">{{ item.format }}</p>
+
+        <div class="badges">
+          @if (discount(); as percent) {
+            <lv-badge variant="offer">−{{ percent }} %</lv-badge>
+          }
+          @for (tag of item.tags; track tag) {
+            @if (tag !== 'oferta') {
+              <lv-badge [variant]="tag === 'local' ? 'ok' : 'neutral'">{{ tagLabels[tag] }}</lv-badge>
+            }
+          }
+          @if (item.adultsOnly) {
+            <lv-badge variant="age">+18</lv-badge>
+          }
+        </div>
+
+        <div class="price-block">
+          <span class="price">{{ price() }}</span>
+          @if (oldPrice(); as previous) {
+            <s class="old"><span class="lv-visually-hidden">Precio anterior </span>{{ previous }}</s>
+          }
+          <span class="unit">{{ item.unitPrice }}</span>
+        </div>
+
+        @if (item.adultsOnly) {
+          <lv-alert variant="info">Producto para mayores de 18 años. Al tramitar el pedido tendrás que confirmar tu edad.</lv-alert>
+        }
+
+        @if (item.stock === 0) {
+          <lv-alert variant="warn">Este producto está agotado ahora mismo. Vuelve pronto o mira productos parecidos más abajo.</lv-alert>
+        } @else {
+          <div class="buy">
+            <lv-quantity-stepper [itemName]="item.name" [min]="1" [max]="item.stock" [(value)]="quantity" />
+            <button lvButton="accent" lvSize="large" type="button" (click)="add()">{{ addLabel() }}</button>
+          </div>
+          @if (lowStock()) {
+            <p class="low">Quedan solo {{ item.stock }} unidades.</p>
+          }
+          @if (inCart() > 0) {
+            <p class="incart">Ya tienes {{ inCart() }} en la cesta. <a routerLink="/cesta">Ver la cesta</a></p>
+          }
+        }
+
+        <ul class="perks" role="list">
+          <li><span aria-hidden="true">🚚</span> Reparto a domicilio en 1 a 3 días</li>
+          <li><span aria-hidden="true">🏪</span> También en nuestra tienda de La Viñuela</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="details">
+      <section aria-labelledby="d-desc">
+        <h2 id="d-desc">Descripción</h2>
+        <p>{{ item.description }}</p>
+        @if (item.origin) {
+          <p><strong>Origen:</strong> {{ item.origin }}</p>
+        }
+      </section>
+
+      <section aria-labelledby="d-alerg">
+        <h2 id="d-alerg">Alérgenos</h2>
+        @if (item.allergens.length > 0) {
+          <p>Contiene: <strong>{{ item.allergens.join(', ') }}</strong>.</p>
+        } @else {
+          <p>No contiene alérgenos de declaración obligatoria. Revisa siempre el etiquetado del envase.</p>
+        }
+      </section>
+
+      @if (item.nutrition; as nutrition) {
+        <section aria-labelledby="d-nutri">
+          <h2 id="d-nutri">Información nutricional</h2>
+          <table class="nutrition">
+            <caption class="lv-visually-hidden">Valores medios por 100 g o 100 ml</caption>
+            <thead><tr><th scope="col">Por 100 g / 100 ml</th><th scope="col">Valor</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Valor energético</th><td>{{ nutrition.energy }}</td></tr>
+              <tr><th scope="row">Grasas</th><td>{{ nutrition.fat }}</td></tr>
+              <tr><th scope="row">de las cuales saturadas</th><td>{{ nutrition.saturates }}</td></tr>
+              <tr><th scope="row">Hidratos de carbono</th><td>{{ nutrition.carbohydrates }}</td></tr>
+              <tr><th scope="row">de los cuales azúcares</th><td>{{ nutrition.sugars }}</td></tr>
+              <tr><th scope="row">Proteínas</th><td>{{ nutrition.protein }}</td></tr>
+              <tr><th scope="row">Sal</th><td>{{ nutrition.salt }}</td></tr>
+            </tbody>
+          </table>
+        </section>
+      }
+    </div>
+
+    @if (related().length > 0) {
+      <section class="related" aria-labelledby="d-rel">
+        <h2 id="d-rel">También te puede interesar</h2>
+        <ul class="grid" role="list">
+          @for (other of related(); track other.slug) {
+            <li><lv-product-card [product]="other" /></li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <section class="missing">
+      <p class="big" aria-hidden="true">🔍</p>
+      <h1>No encontramos ese producto</h1>
+      <p>Puede que ya no esté en el catálogo. Prueba con el buscador o mira las ofertas.</p>
+      <a lvButton routerLink="/ofertas">Ver las ofertas</a>
+    </section>
+  }
+</div>

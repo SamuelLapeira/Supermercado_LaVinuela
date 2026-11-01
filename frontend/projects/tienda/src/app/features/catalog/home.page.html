@@ -1,0 +1,94 @@
+<section class="hero">
+  <div class="lv-container hero-grid">
+    <div class="hero-text">
+      <p class="kicker">Supermercado de La Viñuela</p>
+      <h1>Tu supermercado de la sierra, en tu puerta</h1>
+      <p class="lead">
+        Producto fresco, de aquí y al mejor precio, con reparto a domicilio hasta 40 km de La Viñuela. Elige sin prisas y
+        recíbelo en casa.
+      </p>
+      <div class="cta">
+        <a lvButton="accent" lvSize="large" routerLink="/ofertas">Ver las ofertas</a>
+        <a lvButton="ghost" lvSize="large" class="ghost-light" routerLink="/categoria/frutas-verduras">Empezar la compra</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <img class="seal" src="logo-emblema.webp" alt="" width="208" height="208" />
+      <span class="float f1">🍅</span>
+      <span class="float f2">🧀</span>
+      <span class="float f3">🫒</span>
+      <span class="float f4">🥖</span>
+      <span class="float f5">🍊</span>
+    </div>
+  </div>
+</section>
+
+<section class="perks" aria-label="Ventajas de comprar con nosotros">
+  <ul class="lv-container perks-list" role="list">
+    <li><span aria-hidden="true">🚚</span><div><strong>Reparto a domicilio</strong><br />En 1 a 3 días, hasta 40 km</div></li>
+    <li><span aria-hidden="true">🌿</span><div><strong>Producto de la sierra</strong><br />Directo de productores de la Axarquía</div></li>
+    <li><span aria-hidden="true">💳</span><div><strong>Pago seguro</strong><br />Con tarjeta, sin guardar tus datos</div></li>
+    <li><span aria-hidden="true">🏪</span><div><strong>Tienda física</strong><br />En La Viñuela, de lunes a domingo</div></li>
+  </ul>
+</section>
+
+<div class="lv-container sections">
+  <section aria-labelledby="home-categorias">
+    <h2 id="home-categorias">Compra por categorías</h2>
+    <ul class="cats" role="list">
+      @for (category of categories; track category.slug) {
+        <li>
+          <a class="cat" [class]="'cat lv-tile--' + category.tone" [routerLink]="['/categoria', category.slug]">
+            <span class="cat-emoji" aria-hidden="true">{{ category.emoji }}</span>
+            <span class="cat-name">{{ category.name }}</span>
+            <span class="cat-count">{{ category.count }} productos</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="home-ofertas">
+    <div class="section-head">
+      <h2 id="home-ofertas">Ofertas de la semana</h2>
+      <a routerLink="/ofertas">Ver todas las ofertas</a>
+    </div>
+    <ul class="products" role="list">
+      @for (product of offers; track product.slug) {
+        <li><lv-product-card [product]="product" /></li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="home-local">
+    <div class="section-head">
+      <h2 id="home-local">De nuestra tierra</h2>
+      <a routerLink="/buscar" [queryParams]="{ q: 'sierra' }">Más productos de aquí</a>
+    </div>
+    <p class="section-lead">Frescos y artesanos de la Axarquía y los Montes de Málaga: del campo, la huerta y las bodegas de al lado.</p>
+    <ul class="products" role="list">
+      @for (product of local; track product.slug) {
+        <li><lv-product-card [product]="product" /></li>
+      }
+    </ul>
+  </section>
+
+  <section aria-labelledby="home-como">
+    <h2 id="home-como">Así de fácil</h2>
+    <ol class="steps" role="list">
+      <li><span class="num" aria-hidden="true">1</span><h3>Elige tus productos</h3><p>Busca o recorre las categorías y añade a la cesta lo que necesites.</p></li>
+      <li><span class="num" aria-hidden="true">2</span><h3>Dinos dónde entregar</h3><p>Calculamos el envío según la distancia por carretera. Sin franjas horarias: te avisamos del plazo.</p></li>
+      <li><span class="num" aria-hidden="true">3</span><h3>Recíbelo en casa</h3><p>Pagas con tarjeta, seguimos tu pedido paso a paso y llega en 1 a 3 días.</p></li>
+    </ol>
+  </section>
+
+  <section class="visit lv-card" aria-labelledby="home-visita">
+    <div class="visit-body">
+      <h2 id="home-visita">¿Prefieres venir?</h2>
+      <p>Te esperamos en la tienda de siempre, en el centro de La Viñuela.</p>
+      <address>C. Pizarras, 34 · 29712 La Viñuela (Málaga)</address>
+      <p>Lunes a sábado de 9:00 a 21:00 · Domingos y festivos de 9:30 a 14:30</p>
+    </div>
+    <span class="visit-emoji" aria-hidden="true">🌳</span>
+  </section>
+</div>

@@ -1,5 +1,4 @@
 /*
- * Public API Surface of util
+ * API pública de la librería util: funciones puras sin dependencias del proyecto.
  */
-
-export * from './lib/util';
+export * from './lib/format';

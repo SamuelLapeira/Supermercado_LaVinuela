@@ -1,21 +1,35 @@
 package com.lavinuela.shop.identity.infrastructure.web;
 
+import com.lavinuela.shop.identity.application.AuthSession;
+import com.lavinuela.shop.identity.application.LoginService;
+import com.lavinuela.shop.identity.application.LogoutService;
+import com.lavinuela.shop.identity.application.RefreshSessionService;
 import com.lavinuela.shop.identity.application.RegisterCustomerCommand;
 import com.lavinuela.shop.identity.application.RegisterCustomerService;
 import com.lavinuela.shop.identity.application.RegistrationResult;
 import com.lavinuela.shop.identity.application.ResendVerificationService;
 import com.lavinuela.shop.identity.application.VerifyEmailService;
+import com.lavinuela.shop.identity.domain.service.LoginPolicy;
 import com.lavinuela.shop.identity.domain.service.VerificationPolicy;
+import com.lavinuela.shop.identity.infrastructure.config.IdentityProperties;
+import com.lavinuela.shop.shared.error.BusinessRuleViolation;
+import com.lavinuela.shop.shared.error.ErrorCode;
 import com.lavinuela.shop.shared.infrastructure.web.ProblemResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.Nullable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,22 +44,42 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/auth")
-@Tag(name = "Cuentas", description = "Registro de cuentas y verificación del correo electrónico")
+@Tag(name = "Cuentas", description = "Registro de cuentas, verificación del correo e inicio y cierre de sesión")
 class AuthController {
 
     private static final String PROBLEM_JSON = "application/problem+json";
 
+    /**
+     * Cabecera que la tienda añade a todas las peticiones. Renovar y cerrar sesión se identifican con una cookie, así que
+     * exigen además esta cabecera: una web ajena no puede añadirla (el navegador no se lo permite sin permiso del servidor).
+     */
+    static final String CLIENT_HEADER = "X-LV-Client";
+
+    private static final String CLIENT_HEADER_VALUE = "web";
+
     private final RegisterCustomerService register;
     private final VerifyEmailService verifyEmail;
     private final ResendVerificationService resendVerification;
+    private final LoginService login;
+    private final RefreshSessionService refreshSession;
+    private final LogoutService logout;
+    private final boolean cookieSecure;
 
     AuthController(
             RegisterCustomerService register,
             VerifyEmailService verifyEmail,
-            ResendVerificationService resendVerification) {
+            ResendVerificationService resendVerification,
+            LoginService login,
+            RefreshSessionService refreshSession,
+            LogoutService logout,
+            IdentityProperties properties) {
         this.register = register;
         this.verifyEmail = verifyEmail;
         this.resendVerification = resendVerification;
+        this.login = login;
+        this.refreshSession = refreshSession;
+        this.logout = logout;
+        this.cookieSecure = properties.refreshCookieSecure();
     }
 
     /** Crea la cuenta (pendiente de verificar) y envía el código por correo. */
@@ -95,5 +129,81 @@ class AuthController {
     ResendVerificationResponse resendVerification(@Valid @RequestBody ResendVerificationRequest request) {
         resendVerification.resend(request.email());
         return new ResendVerificationResponse((int) VerificationPolicy.RESEND_COOLDOWN.toSeconds());
+    }
+
+    /** Inicia sesión con el correo y la contraseña. */
+    @PostMapping("/login")
+    @Operation(operationId = "login", summary = "Iniciar sesión",
+            description = "Devuelve un token de acceso (15 minutos) y deja en una cookie protegida el token de renovación. "
+                    + "Tras 5 intentos fallidos con un mismo correo se bloquea durante 15 minutos. La respuesta es la misma "
+                    + "si el correo no existe o la contraseña es incorrecta.")
+    @ApiResponse(responseCode = "200", description = "Sesión abierta",
+            content = @Content(schema = @Schema(implementation = SessionResponse.class)))
+    @ApiResponse(responseCode = "400", description = "Datos incorrectos (VALIDATION_FAILED)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    @ApiResponse(responseCode = "401", description = "Correo o contraseña incorrectos (AUTH_INVALID_CREDENTIALS)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    @ApiResponse(responseCode = "403", description = "La contraseña es correcta pero falta confirmar el correo (AUTH_EMAIL_NOT_VERIFIED)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    @ApiResponse(responseCode = "423", description = "Demasiados intentos fallidos (AUTH_ACCOUNT_LOCKED)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    ResponseEntity<SessionResponse> login(
+            @Valid @RequestBody LoginRequest request,
+            @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.USER_AGENT, required = false) @Nullable String userAgent) {
+        return sessionResponse(login.login(request.email(), request.password(), userAgent));
+    }
+
+    /** Renueva la sesión con la cookie del token de renovación. */
+    @PostMapping("/refresh")
+    @Operation(operationId = "refreshSession", summary = "Renovar la sesión",
+            description = "Cambia el token de renovación (que viaja en una cookie que JavaScript no puede leer) por uno nuevo, "
+                    + "y entrega un token de acceso nuevo. Cada token de renovación vale una sola vez: si se reutiliza uno "
+                    + "ya usado, se cierra la sesión entera por seguridad. Exige la cabecera X-LV-Client: web.")
+    @ApiResponse(responseCode = "200", description = "Sesión renovada",
+            content = @Content(schema = @Schema(implementation = SessionResponse.class)))
+    @ApiResponse(responseCode = "401", description = "Sin sesión, caducada (AUTH_TOKEN_EXPIRED) o reutilizada (AUTH_TOKEN_REUSED)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    @ApiResponse(responseCode = "403", description = "Falta la cabecera X-LV-Client (ACCESS_DENIED)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    ResponseEntity<SessionResponse> refresh(
+            @Parameter(hidden = true) @CookieValue(name = RefreshCookie.NAME, required = false) @Nullable String refreshToken,
+            @Parameter(hidden = true) @RequestHeader(name = CLIENT_HEADER, required = false) @Nullable String client,
+            @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.USER_AGENT, required = false) @Nullable String userAgent) {
+        requireWebClient(client);
+        return sessionResponse(refreshSession.refresh(refreshToken, userAgent));
+    }
+
+    /** Cierra la sesión: anula el token de renovación y borra la cookie. */
+    @PostMapping("/logout")
+    @Operation(operationId = "logout", summary = "Cerrar sesión",
+            description = "Anula la sesión y borra la cookie del token de renovación. Es idempotente: si no hay sesión, no pasa nada. "
+                    + "Exige la cabecera X-LV-Client: web.")
+    @ApiResponse(responseCode = "204", description = "Sesión cerrada")
+    @ApiResponse(responseCode = "403", description = "Falta la cabecera X-LV-Client (ACCESS_DENIED)",
+            content = @Content(mediaType = PROBLEM_JSON, schema = @Schema(implementation = ProblemResponse.class)))
+    ResponseEntity<Void> logout(
+            @Parameter(hidden = true) @CookieValue(name = RefreshCookie.NAME, required = false) @Nullable String refreshToken,
+            @Parameter(hidden = true) @RequestHeader(name = CLIENT_HEADER, required = false) @Nullable String client) {
+        requireWebClient(client);
+        logout.logout(refreshToken);
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, RefreshCookie.clear(cookieSecure).toString())
+                .build();
+    }
+
+    private ResponseEntity<SessionResponse> sessionResponse(AuthSession session) {
+        SessionResponse body = new SessionResponse(
+                session.accessToken(),
+                (int) LoginPolicy.ACCESS_TOKEN_VALIDITY.toSeconds(),
+                new UserResponse(session.user().id(), session.user().username(), session.user().email(), session.user().roles()));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, RefreshCookie.issue(session.refreshToken(), LoginPolicy.REFRESH_TOKEN_VALIDITY, cookieSecure).toString())
+                .body(body);
+    }
+
+    private static void requireWebClient(@Nullable String client) {
+        if (!CLIENT_HEADER_VALUE.equals(client)) {
+            throw new BusinessRuleViolation(ErrorCode.ACCESS_DENIED);
+        }
     }
 }

@@ -37,6 +37,13 @@ class RegisterCustomerServiceTests {
     }
 
     @Test
+    void everyNewAccountIsACustomer() {
+        fx.register.register(fx.command("samuel", "samuel@example.com"));
+
+        assertThat(fx.store.users().get(0).roles()).containsExactly("CUSTOMER");
+    }
+
+    @Test
     void neverStoresTheCodeInTheClear() {
         fx.register.register(fx.command("samuel", "samuel@example.com"));
 

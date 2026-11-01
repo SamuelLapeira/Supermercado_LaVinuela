@@ -2,7 +2,10 @@ package com.lavinuela.shop.identity.domain.model;
 
 import com.lavinuela.shop.shared.domain.PublicId;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -22,6 +25,8 @@ public final class User {
     private @Nullable Instant emailVerifiedAt;
     private final boolean marketingConsent;
     private final int version;
+    private @Nullable Instant lastLoginAt;
+    private final Set<String> roles;
 
     public User(
             @Nullable Long id,
@@ -33,6 +38,21 @@ public final class User {
             @Nullable Instant emailVerifiedAt,
             boolean marketingConsent,
             int version) {
+        this(id, publicId, username, email, passwordHash, status, emailVerifiedAt, marketingConsent, version, null, Set.of());
+    }
+
+    public User(
+            @Nullable Long id,
+            PublicId publicId,
+            String username,
+            String email,
+            String passwordHash,
+            UserStatus status,
+            @Nullable Instant emailVerifiedAt,
+            boolean marketingConsent,
+            int version,
+            @Nullable Instant lastLoginAt,
+            Set<String> roles) {
         this.id = id;
         this.publicId = Objects.requireNonNull(publicId);
         this.username = Objects.requireNonNull(username);
@@ -42,6 +62,8 @@ public final class User {
         this.emailVerifiedAt = emailVerifiedAt;
         this.marketingConsent = marketingConsent;
         this.version = version;
+        this.lastLoginAt = lastLoginAt;
+        this.roles = Collections.unmodifiableSet(new LinkedHashSet<>(roles));
     }
 
     /** Cuenta nueva: queda pendiente de verificar el correo. */
@@ -56,6 +78,20 @@ public final class User {
         }
         this.status = UserStatus.ACTIVE;
         this.emailVerifiedAt = Objects.requireNonNull(now);
+    }
+
+    /** Deja constancia de un inicio de sesión correcto. */
+    public void registerLogin(Instant now) {
+        this.lastLoginAt = Objects.requireNonNull(now);
+    }
+
+    /** Copia de la cuenta con otros roles (el resto igual). */
+    public User withRoles(Set<String> newRoles) {
+        return new User(id, publicId, username, email, passwordHash, status, emailVerifiedAt, marketingConsent, version, lastLoginAt, newRoles);
+    }
+
+    public boolean isActive() {
+        return status == UserStatus.ACTIVE;
     }
 
     public boolean isPendingVerification() {
@@ -103,5 +139,14 @@ public final class User {
 
     public int version() {
         return version;
+    }
+
+    public @Nullable Instant lastLoginAt() {
+        return lastLoginAt;
+    }
+
+    /** Códigos de los roles de la cuenta (por ejemplo {@code CUSTOMER}). */
+    public Set<String> roles() {
+        return roles;
     }
 }

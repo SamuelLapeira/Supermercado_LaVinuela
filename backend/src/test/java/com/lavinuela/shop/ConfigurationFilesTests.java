@@ -58,6 +58,7 @@ class ConfigurationFilesTests {
         assertThat(lookup(local, "spring", "flyway", "user")).isNotNull();
         assertThat(lookup(local, "spring", "mail", "host")).isNotNull();
         assertThat(lookup(local, "app", "identity", "code-pepper")).isNotNull();
+        assertThat(lookup(local, "app", "identity", "jwt-secret")).isNotNull();
         assertThat(lookup(local, "management", "server", "port")).isNotNull();
     }
 
@@ -67,6 +68,7 @@ class ConfigurationFilesTests {
 
         assertThat(lookup(prod, "spring", "mail", "host")).isEqualTo("${MAIL_HOST}");
         assertThat(lookup(prod, "app", "identity", "code-pepper")).isEqualTo("${APP_CODE_PEPPER}");
+        assertThat(lookup(prod, "app", "identity", "jwt-secret")).isEqualTo("${APP_JWT_SECRET}");
         assertThat(lookup(prod, "app", "mail", "from")).isEqualTo("${APP_MAIL_FROM}");
     }
 

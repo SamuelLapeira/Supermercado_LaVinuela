@@ -19,3 +19,4 @@ Cada decisión importante se registra aquí con su motivo. Si cambia, se añade 
 | 013 | [Identificador de petición propio y puerto de gestión aparte](013-identificador-de-peticion-y-puerto-de-gestion.md) | Aceptada |
 | 014 | [Registro con usuario, contraseña y código de verificación por correo](014-registro-con-codigo-de-verificacion.md) | Aceptada |
 | 015 | [Contrato OpenAPI generado del código](015-contrato-openapi-generado-del-codigo.md) | Aceptada |
+| 016 | [Sesiones con token de acceso corto y token de renovación rotatorio](016-sesiones-token-de-acceso-y-renovacion-rotatoria.md) | Aceptada |

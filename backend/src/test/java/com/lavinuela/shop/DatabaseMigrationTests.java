@@ -43,7 +43,7 @@ class DatabaseMigrationTests {
     void appliesEveryMigration() {
         Integer applied = jdbc.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success = 1", Integer.class);
 
-        assertThat(applied).isEqualTo(13);
+        assertThat(applied).isEqualTo(14);
     }
 
     @Test

@@ -1,0 +1,47 @@
+<article class="card">
+  <a class="media" [routerLink]="['/producto', product().slug]" tabindex="-1" aria-hidden="true">
+    <span class="tile" [class]="'tile lv-tile--' + tone()"><span class="emoji">{{ product().emoji }}</span></span>
+    <span class="badges">
+      @if (discount(); as percent) {
+        <lv-badge variant="offer">−{{ percent }} %</lv-badge>
+      }
+      @if (isLocal()) {
+        <lv-badge variant="ok">De la sierra</lv-badge>
+      }
+      @if (product().adultsOnly) {
+        <lv-badge variant="age">+18</lv-badge>
+      }
+    </span>
+  </a>
+
+  <div class="body">
+    <p class="brand">{{ product().brand }}</p>
+    <h3 class="name">
+      <a [routerLink]="['/producto', product().slug]">{{ product().name }}</a>
+    </h3>
+    <p class="format">{{ product().format }}</p>
+
+    <div class="prices">
+      <span class="lv-price">{{ price() }}</span>
+      @if (oldPrice(); as previous) {
+        <s class="old"><span class="lv-visually-hidden">Antes </span>{{ previous }}</s>
+      }
+    </div>
+    <p class="unit">{{ product().unitPrice }}</p>
+
+    <div class="buy">
+      @if (product().stock === 0) {
+        <lv-badge variant="danger">Agotado</lv-badge>
+      } @else if (quantity() > 0) {
+        <lv-quantity-stepper [itemName]="product().name" [max]="product().stock" [value]="quantity()" (valueChange)="setQuantity($event)" />
+      } @else {
+        <button lvButton="accent" type="button" (click)="add()">
+          Añadir<span class="lv-visually-hidden"> {{ product().name }} a la cesta</span>
+        </button>
+        @if (lowStock()) {
+          <span class="low">Quedan {{ product().stock }}</span>
+        }
+      }
+    </div>
+  </div>
+</article>

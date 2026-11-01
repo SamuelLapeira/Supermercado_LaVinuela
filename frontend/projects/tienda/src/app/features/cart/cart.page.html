@@ -1,0 +1,102 @@
+<div class="lv-container page">
+  <h1>Tu cesta</h1>
+
+  @if (cart.items().length === 0) {
+    <section class="empty">
+      <p class="big" aria-hidden="true">🧺</p>
+      <h2>Todavía no has añadido nada</h2>
+      <p>Empieza por las ofertas de la semana o recorre las categorías.</p>
+      <div class="actions">
+        <a lvButton lvSize="large" routerLink="/ofertas">Ver las ofertas</a>
+        <a lvButton="ghost" lvSize="large" routerLink="/">Ir a la portada</a>
+      </div>
+    </section>
+  } @else {
+    <div class="layout">
+      <section aria-label="Productos de la cesta">
+        <ul class="lines" role="list">
+          @for (item of cart.items(); track item.product.slug) {
+            <li class="line">
+              <a class="thumb" [routerLink]="['/producto', item.product.slug]" aria-hidden="true" tabindex="-1">{{ item.product.emoji }}</a>
+              <div class="what">
+                <a class="name" [routerLink]="['/producto', item.product.slug]">{{ item.product.name }}</a>
+                <span class="meta">{{ item.product.format }} · {{ money(item.product.price) }} · {{ item.product.unitPrice }}</span>
+                @if (item.product.adultsOnly) {
+                  <span class="age">+18</span>
+                }
+              </div>
+              <lv-quantity-stepper [itemName]="item.product.name" [max]="item.product.stock" [value]="item.quantity" (valueChange)="cart.setQuantity(item.product.slug, $event)" />
+              <span class="total">{{ money(item.total) }}</span>
+              <button class="remove" lvButton="ghost" type="button" (click)="cart.remove(item.product.slug)">
+                Quitar<span class="lv-visually-hidden"> {{ item.product.name }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+        <p class="keep"><a routerLink="/">← Seguir comprando</a></p>
+      </section>
+
+      <aside class="summary lv-card" aria-labelledby="resumen">
+        <div class="summary-body">
+          <h2 id="resumen">Resumen</h2>
+
+          <dl class="rows">
+            <div class="row"><dt>Subtotal ({{ cart.count() }} {{ cart.count() === 1 ? 'producto' : 'productos' }})</dt><dd>{{ money(cart.subtotal()) }}</dd></div>
+            <div class="row">
+              <dt>Envío</dt>
+              <dd>
+                @if (cart.deliveryFee() === null) {
+                  <span class="muted">{{ cart.zone() ? 'No repartimos aquí' : 'Elige dónde' }}</span>
+                } @else if (cart.deliveryFee() === 0) {
+                  <strong class="free">Gratis</strong>
+                } @else {
+                  {{ money(cart.deliveryFee() ?? 0) }}
+                }
+              </dd>
+            </div>
+            <div class="row grand"><dt>Total</dt><dd>{{ money(cart.total()) }}</dd></div>
+          </dl>
+
+          <div class="zone">
+            <label for="zona">¿Dónde entregamos?</label>
+            <select id="zona" class="select" (change)="onZone($event)">
+              <option value="" [selected]="cart.zone() === null">Elige tu localidad</option>
+              @for (zone of cart.zones; track zone.slug) {
+                <option [value]="zone.slug" [selected]="cart.zone()?.slug === zone.slug">{{ zone.name }} (a {{ zone.km }} km)</option>
+              }
+            </select>
+            <p class="hint">Calculamos el envío por la distancia real por carretera. Distancias de ejemplo.</p>
+          </div>
+
+          @if (cart.delivery()?.kind === 'out-of-zone') {
+            <lv-alert variant="danger">Todavía no repartimos en {{ cart.zone()?.name }}: el límite es de {{ demo.maxKm }} km desde La Viñuela.</lv-alert>
+          }
+
+          @if (cart.belowMinimum()) {
+            <lv-alert variant="warn">El pedido mínimo es de {{ money(demo.minimumOrder) }}. Te faltan {{ money(missingForMinimum()) }}.</lv-alert>
+          }
+
+          <div class="free-ship">
+            @if (missingForFree() > 0) {
+              <p>Te faltan <strong>{{ money(missingForFree()) }}</strong> para el envío gratis.</p>
+            } @else {
+              <p class="free"><strong>¡Tienes el envío gratis!</strong></p>
+            }
+            <lv-progress [value]="cart.subtotal()" [max]="demo.freeShippingFrom" label="Progreso hacia el envío gratis" />
+          </div>
+
+          @if (cart.hasAdultsOnly()) {
+            <lv-alert variant="info">Tu cesta lleva productos para mayores de 18 años: al tramitar el pedido tendrás que confirmar tu edad.</lv-alert>
+          }
+
+          @if (cart.canCheckout()) {
+            <a lvButton lvSize="large" lvBlock routerLink="/pedido">Tramitar pedido</a>
+          } @else {
+            <button lvButton lvSize="large" lvBlock type="button" disabled>Tramitar pedido</button>
+            <p class="hint">Elige tu localidad y llega al pedido mínimo para continuar.</p>
+          }
+        </div>
+      </aside>
+    </div>
+  }
+</div>

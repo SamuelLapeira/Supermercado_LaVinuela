@@ -18,6 +18,10 @@ app:
   identity:
     # Clave secreta de los códigos de verificación. La genera ./tools/dev-up (APP_CODE_PEPPER en .env).
     code-pepper: ${APP_CODE_PEPPER}
+    # Clave con la que se firman los tokens de acceso. La genera ./tools/dev-up (APP_JWT_SECRET en .env).
+    jwt-secret: ${APP_JWT_SECRET}
+    # El entorno local va por HTTP; en producción la cookie solo viaja por HTTPS.
+    refresh-cookie-secure: false
 
 management:
   server:

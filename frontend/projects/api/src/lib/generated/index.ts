@@ -8,16 +8,27 @@ export type { StrictHttpResponse } from './strict-http-response';
 export { Api } from './api';
 
 export type { FieldError } from './models/field-error';
+export type { LoginRequest } from './models/login-request';
 export type { Problem } from './models/problem';
 export type { RegisterRequest } from './models/register-request';
 export type { RegistrationResponse } from './models/registration-response';
 export type { ResendVerificationRequest } from './models/resend-verification-request';
 export type { ResendVerificationResponse } from './models/resend-verification-response';
+export type { SessionResponse } from './models/session-response';
+export type { UserResponse } from './models/user-response';
 export type { VerifyEmailRequest } from './models/verify-email-request';
 
+export type { Login$Params as Login$Params } from './fn/cuentas/login';
+export { login as login } from './fn/cuentas/login';
+export type { Logout$Params as Logout$Params } from './fn/cuentas/logout';
+export { logout as logout } from './fn/cuentas/logout';
+export type { RefreshSession$Params as RefreshSession$Params } from './fn/cuentas/refresh-session';
+export { refreshSession as refreshSession } from './fn/cuentas/refresh-session';
 export type { RegisterAccount$Params as RegisterAccount$Params } from './fn/cuentas/register-account';
 export { registerAccount as registerAccount } from './fn/cuentas/register-account';
 export type { ResendVerification$Params as ResendVerification$Params } from './fn/cuentas/resend-verification';
 export { resendVerification as resendVerification } from './fn/cuentas/resend-verification';
 export type { VerifyEmail$Params as VerifyEmail$Params } from './fn/cuentas/verify-email';
 export { verifyEmail as verifyEmail } from './fn/cuentas/verify-email';
+export type { GetCurrentUser$Params as GetCurrentUser$Params } from './fn/cuentas/get-current-user';
+export { getCurrentUser as getCurrentUser } from './fn/cuentas/get-current-user';

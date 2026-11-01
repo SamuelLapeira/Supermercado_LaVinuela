@@ -1,0 +1,122 @@
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(26rem, 100vw);
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-3);
+}
+
+.drawer::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-4) var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.x {
+  padding-inline: var(--space-3);
+}
+
+.empty {
+  display: grid;
+  gap: var(--space-3);
+  align-content: center;
+  justify-items: center;
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.big {
+  font-size: 3.5rem;
+}
+
+.lines {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  margin: 0;
+  padding: var(--space-3) var(--space-5);
+  overflow-y: auto;
+  list-style: none;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.thumb {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+  font-size: 1.8rem;
+}
+
+.info {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: start;
+  min-width: 0;
+}
+
+.name {
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: var(--fs-300);
+}
+
+.total {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.foot {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border-top: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.subtotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-500);
+}
+
+.free {
+  font-size: var(--fs-300);
+}
+
+.free.ok {
+  color: var(--ok);
+  font-weight: 700;
+}
