@@ -39,7 +39,7 @@ services:
   # Valkey es compatible con el protocolo de Redis y tiene licencia BSD. La decisión definitiva
   # (Redis o Valkey) se confirma con el despliegue; para la aplicación es indiferente.
   redis:
-    image: valkey/valkey:8-alpine
+    image: valkey/valkey:9-alpine
     restart: unless-stopped
     command: ["valkey-server", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru", "--save", "", "--appendonly", "no"]
     ports:
